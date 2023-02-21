@@ -20,7 +20,7 @@ jobs:
         env:
           CI: false
         run: |
-          cp -r frontend build
+          cp -r packages/app build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
