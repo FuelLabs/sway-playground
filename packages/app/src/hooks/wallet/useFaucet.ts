@@ -10,8 +10,10 @@ export const useFaucet = () => {
         async () => {
             if (wallet?.address) {
                 const faucet_uri = "http://127.0.0.1:4040/dispense";
-                if (!wallet.provider.url.includes("4000")){
-                    throw new Error("Switch network to http://localhost:4000/graphql");
+                if (!wallet.provider.url.includes("4000")) {
+                    throw new Error(
+                        "Switch network to http://localhost:4000/graphql"
+                    );
                 }
                 const request = new Request(faucet_uri, {
                     method: "POST",

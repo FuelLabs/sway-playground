@@ -50,6 +50,13 @@ export function CounterPage() {
                         />
                     }
                     {
+                        network.includes("localhost")
+                        &&
+                        (networkState === NetworkState.CAN_DISCONNECT || networkState === NetworkState.DISCONNECTING)
+                        &&
+                        <LocalFaucetButton />
+                    }
+                    {
                         deployState
                         &&
                         (networkState === NetworkState.CAN_DISCONNECT || networkState === NetworkState.DISCONNECTING)
