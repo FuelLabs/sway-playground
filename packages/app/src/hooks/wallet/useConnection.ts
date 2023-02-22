@@ -6,8 +6,8 @@ import { useFuel } from ".";
 
 export const useConnection = (
     connect: boolean,
-    setNetwork: any,
-    setNetworkState: any
+    setNetwork: React.Dispatch<React.SetStateAction<string>>,
+    setNetworkState: React.Dispatch<React.SetStateAction<NetworkState>>
 ) => {
     const [fuel] = useFuel();
     if (!fuel) toast.error("Error fuelWeb3 instance is not defined");
