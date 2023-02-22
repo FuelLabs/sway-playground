@@ -1,7 +1,7 @@
 import { toast } from "@fuel-ui/react";
 import { useMutation } from "@tanstack/react-query";
 import { ContractFactory, JsonAbi } from "fuels";
-import { panicError, queryClient } from "../../utils/queryClient";
+import { panicError } from "../../utils/queryClient";
 import { useWallet } from "./useWallet";
 
 export const useDeployContract = (

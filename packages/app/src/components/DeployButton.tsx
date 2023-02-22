@@ -1,5 +1,4 @@
 import { Button } from "@fuel-ui/react";
-import { useIncrement } from "../hooks/contractFunctions";
 import { useDeployContract } from "../hooks/wallet";
 
 interface DeployButtonProps {
