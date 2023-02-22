@@ -4,7 +4,8 @@ import { useFuel } from "./useFuel";
 
 function useNetwork(
     network: string,
-    setNetwork: React.Dispatch<React.SetStateAction<string>>
+    setNetwork: React.Dispatch<React.SetStateAction<string>>,
+    setDeployState: React.Dispatch<React.SetStateAction<boolean>>
 ) {
     let { provider } = useProvider();
 
@@ -16,6 +17,7 @@ function useNetwork(
 
     const handleNetworkChange = async (network: any) => {
         setNetwork(network.url);
+        setDeployState(false);
     };
 
     useEffect(() => {

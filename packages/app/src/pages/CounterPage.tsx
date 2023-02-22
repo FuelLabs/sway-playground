@@ -15,7 +15,7 @@ export function CounterPage() {
     const abiElement = "<b>ABI</b>"
     const bytecodeElement = "<b>Bytecode</b>:"
 
-    useNetwork(network, setNetwork);
+    useNetwork(network, setNetwork, setDeployState);
 
     return (
         <div className="ui" onClick={() => {
