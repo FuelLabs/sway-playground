@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { CounterContractAbi__factory } from "../../contracts";
+import { SwaypadAbi__factory } from "../../contracts";
 import { useContract } from "../wallet";
 
 export const useCounter = (contractId: string) => {
-    const { contract } = useContract(contractId, CounterContractAbi__factory);
+    const { contract } = useContract(contractId, SwaypadAbi__factory);
 
     const { data: counter } = useQuery(
         ["counter"],

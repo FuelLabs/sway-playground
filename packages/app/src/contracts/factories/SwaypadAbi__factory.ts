@@ -11,7 +11,7 @@
 
 import { Interface, Contract } from "fuels";
 import type { Provider, BaseWalletLocked, AbstractAddress } from "fuels";
-import type { CounterContractAbi, CounterContractAbiInterface } from "../CounterContractAbi";
+import type { SwaypadAbi, SwaypadAbiInterface } from "../SwaypadAbi";
 
 const _abi = {
   "types": [
@@ -70,15 +70,15 @@ const _abi = {
   "configurables": []
 }
 
-export class CounterContractAbi__factory {
+export class SwaypadAbi__factory {
   static readonly abi = _abi
-  static createInterface(): CounterContractAbiInterface {
-    return new Interface(_abi) as unknown as CounterContractAbiInterface
+  static createInterface(): SwaypadAbiInterface {
+    return new Interface(_abi) as unknown as SwaypadAbiInterface
   }
   static connect(
     id: string | AbstractAddress,
     walletOrProvider: BaseWalletLocked | Provider
-  ): CounterContractAbi {
-    return new Contract(id, _abi, walletOrProvider) as unknown as CounterContractAbi
+  ): SwaypadAbi {
+    return new Contract(id, _abi, walletOrProvider) as unknown as SwaypadAbi
   }
 }

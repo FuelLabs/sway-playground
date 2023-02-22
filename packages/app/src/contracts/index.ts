@@ -9,6 +9,6 @@
   Fuel-Core version: 0.17.1
 */
 
-export type { CounterContractAbi } from './CounterContractAbi';
+export type { SwaypadAbi } from './SwaypadAbi';
 
-export { CounterContractAbi__factory } from './factories/CounterContractAbi__factory';
+export { SwaypadAbi__factory } from './factories/SwaypadAbi__factory';

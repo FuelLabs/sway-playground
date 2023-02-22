@@ -1,6 +1,6 @@
 import { toast } from "@fuel-ui/react";
 import { useMutation } from "@tanstack/react-query";
-import { CounterContractAbi__factory } from "../../contracts";
+import { SwaypadAbi__factory } from "../../contracts";
 import { panicError, queryClient } from "../../utils/queryClient";
 import { useContract } from "../wallet";
 
@@ -9,7 +9,7 @@ export const useIncrement = (
     setCounter: React.Dispatch<React.SetStateAction<number>>,
     contractId: string
 ) => {
-    const { contract } = useContract(contractId, CounterContractAbi__factory);
+    const { contract } = useContract(contractId, SwaypadAbi__factory);
 
     const mutation = useMutation(
         async () => {

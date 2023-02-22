@@ -6,13 +6,13 @@ interface CountInfoProps {
 }
 
 export const CountInfo = ({ contractId }: CountInfoProps) => {
-    // let count = useCounter(contractId);
+    let count = useCounter(contractId);
 
     return (
         <>
             <Flex gap="$1">
                 <Text>Counter: </Text>
-                {/* {count === undefined ? (<Spinner></Spinner>) : (<Text>{count}</Text>)} */}
+                {count === undefined ? (<Spinner></Spinner>) : (<Text>{count}</Text>)}
             </Flex>
         </>
     );

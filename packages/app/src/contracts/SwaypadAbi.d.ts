@@ -20,7 +20,7 @@ import type {
   BN,
 } from 'fuels';
 
-interface CounterContractAbiInterface extends Interface {
+interface SwaypadAbiInterface extends Interface {
   functions: {
     counter: FunctionFragment;
     increment: FunctionFragment;
@@ -33,8 +33,8 @@ interface CounterContractAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'increment', data: BytesLike): DecodedValue;
 }
 
-export class CounterContractAbi extends Contract {
-  interface: CounterContractAbiInterface;
+export class SwaypadAbi extends Contract {
+  interface: SwaypadAbiInterface;
   functions: {
     counter: InvokeFunction<[], BN>;
     increment: InvokeFunction<[param: BigNumberish], BN>;
