@@ -16,7 +16,7 @@ const useProvider = () => {
         async () => {
             const isConnected = await fuel.isConnected();
             if (!isConnected) {
-                await fuel.connect();
+                return null;
             }
             const fuelProvider = await fuel.getProvider();
             return fuelProvider;

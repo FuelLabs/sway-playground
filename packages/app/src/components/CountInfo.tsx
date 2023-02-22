@@ -1,8 +1,12 @@
 import { Spinner, Text, Flex } from "@fuel-ui/react";
 import { useCounter } from "../hooks/contractFunctions";
 
-export const CountInfo = () => {
-    // let count = useCounter();
+interface CountInfoProps {
+    contractId: string;
+}
+
+export const CountInfo = ({ contractId }: CountInfoProps) => {
+    // let count = useCounter(contractId);
 
     return (
         <>

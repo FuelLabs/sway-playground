@@ -8,8 +8,8 @@ function useNetwork(
 ) {
     let { provider } = useProvider();
 
-    if (provider !== undefined && network === "") {
-        setNetwork(provider!.url);
+    if (provider !== undefined && provider !== null && network === "") {
+        setNetwork(provider.url);
     }
 
     const [fuel] = useFuel();

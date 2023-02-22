@@ -9,10 +9,10 @@ function App() {
       <ThemeProvider>
         <Flex justify={"space-evenly"}>
           <Box css={{ width: '100%' }}>
-            <EditorPage/>
+            <EditorPage />
           </Box>
           <Box css={{ width: '100%' }}>
-            <CounterPage/>
+            <CounterPage />
           </Box>
         </ Flex>
       </ThemeProvider>
