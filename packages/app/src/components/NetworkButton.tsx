@@ -4,7 +4,7 @@ import { NetworkState } from "../utils/types";
 
 interface NetworkButtonProps {
     networkState: NetworkState;
-    setNetworkState: any;
+    setNetworkState: React.Dispatch<React.SetStateAction<NetworkState>>;
 }
 
 export const NetworkButton = ({ networkState, setNetworkState }: NetworkButtonProps) => {

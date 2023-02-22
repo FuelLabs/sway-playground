@@ -1,11 +1,15 @@
 import { BoxCentered, Stack } from "@fuel-ui/react";
 import { useState } from "react";
 import { CountInfo, IncrementButton, LocalFaucetButton, NetworkButton } from "../components";
+import useNetwork from "../hooks/wallet/useNetwork";
 import { NetworkState } from "../utils";
 
 export function CounterPage() {
     const [counter, setCounter] = useState(0);
+    const [network, setNetwork] = useState("");
     const [networkState, setNetworkState] = useState(NetworkState.CAN_CONNECT);
+
+    useNetwork(network, setNetwork);
 
     return (
         <>
@@ -21,7 +25,7 @@ export function CounterPage() {
                         <>
                             <CountInfo />
                             <IncrementButton amount={1} setCounter={setCounter} />
-                            <LocalFaucetButton />
+                            {network.includes("localhost") && <LocalFaucetButton />}
                         </>
                     }
                 </Stack>
