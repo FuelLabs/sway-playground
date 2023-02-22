@@ -4,7 +4,11 @@ import { NetworkState } from "../../utils";
 import { panicError } from "../../utils/queryClient";
 import { useFuel } from ".";
 
-export const useConnection = (connect: boolean, setNetworkState: any) => {
+export const useConnection = (
+    connect: boolean,
+    setNetwork: any,
+    setNetworkState: any
+) => {
     const [fuel] = useFuel();
     if (!fuel) toast.error("Error fuelWeb3 instance is not defined");
 
@@ -14,11 +18,16 @@ export const useConnection = (connect: boolean, setNetworkState: any) => {
             if (!connect && isConnected) {
                 setNetworkState(NetworkState.DISCONNECTING);
                 await fuel.disconnect();
+                return "";
             } else if (connect && !isConnected) {
                 setNetworkState(NetworkState.CONNECTING);
                 await fuel.connect();
+                let provider = await fuel.getProvider();
+                if (provider !== undefined && provider !== null) {
+                    return provider.url;
+                }
             }
-            return connect;
+            return "";
         },
         {
             onSuccess: (data) => {
@@ -34,13 +43,18 @@ export const useConnection = (connect: boolean, setNetworkState: any) => {
             duration: 100000000,
             id: msg,
         });
+        if (connect) {
+            setNetworkState(NetworkState.CAN_CONNECT);
+        }
     }
 
     function handleSuccess(data: any) {
-        if (data) {
-            setNetworkState(NetworkState.CAN_DISCONNECT);
-        } else {
+        if (data === "") {
+            setNetwork("");
             setNetworkState(NetworkState.CAN_CONNECT);
+        } else {
+            setNetwork(data);
+            setNetworkState(NetworkState.CAN_DISCONNECT);
         }
     }
 

@@ -1,23 +1,21 @@
 import { useEffect } from "react";
-import useProvider from "./useProvider";
 import { useFuel } from "./useFuel";
+import { toast } from "@fuel-ui/react";
 
 function useNetwork(
     network: string,
     setNetwork: React.Dispatch<React.SetStateAction<string>>,
-    setDeployState: React.Dispatch<React.SetStateAction<boolean>>
+    setDeployState: React.Dispatch<React.SetStateAction<boolean>>,
+    setCounter: React.Dispatch<React.SetStateAction<number>>
 ) {
-    let { provider } = useProvider();
-
-    if (provider !== undefined && provider !== null && network === "") {
-        setNetwork(provider.url);
-    }
-
     const [fuel] = useFuel();
+
+    if (!fuel) toast.error("Error fuelWeb3 instance is not defined");
 
     const handleNetworkChange = async (network: any) => {
         setNetwork(network.url);
         setDeployState(false);
+        setCounter(0);
     };
 
     useEffect(() => {

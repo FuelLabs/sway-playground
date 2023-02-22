@@ -13,7 +13,7 @@ export const IncrementButton = ({ amount, setCounter, contractId }: IncrementBut
     return (
         <>
             {
-                <Button onPress={() => incrementMutation.mutate()} type="button">
+                <Button onPress={() => incrementMutation.mutate()} type="button" size="lg">
                     Increment
                 </Button>
             }

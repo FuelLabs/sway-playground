@@ -9,7 +9,7 @@ export const LocalFaucetButton = () => {
             <Button
                 type="button"
                 variant="outlined"
-                size="xs"
+                size="md"
                 color="yellow"
                 onPress={() => {
                     faucetMutation.mutate();

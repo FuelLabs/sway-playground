@@ -18,7 +18,7 @@ export const DeployButton = ({ abi, bytecode, setContractId, setDeployState }: D
                     onPress={() => deployContractMutation.mutate()
                     }
                     type="button"
-                    size="xs"
+                    size="md"
                     color="accent"
                     isDisabled={!abi || !bytecode}
                 >

@@ -3,13 +3,14 @@ import { useConnection } from "../hooks/wallet";
 import { NetworkState } from "../utils/types";
 
 interface NetworkButtonProps {
+    setNetwork: React.Dispatch<React.SetStateAction<string>>;
     networkState: NetworkState;
     setNetworkState: React.Dispatch<React.SetStateAction<NetworkState>>;
 }
 
-export const NetworkButton = ({ networkState, setNetworkState }: NetworkButtonProps) => {
-    const connectMutation = useConnection(true, setNetworkState);
-    const disConnectMutation = useConnection(false, setNetworkState);
+export const NetworkButton = ({ setNetwork, networkState, setNetworkState }: NetworkButtonProps) => {
+    const connectMutation = useConnection(true, setNetwork, setNetworkState);
+    const disConnectMutation = useConnection(false, setNetwork, setNetworkState);
 
     return (
         <>
@@ -22,7 +23,7 @@ export const NetworkButton = ({ networkState, setNetworkState }: NetworkButtonPr
                         }}
                         type="button"
                         variant="outlined"
-                        size="xs"
+                        size="md"
                         color="green"
                     > Connect
                     </Button> :
@@ -30,7 +31,7 @@ export const NetworkButton = ({ networkState, setNetworkState }: NetworkButtonPr
                         <Button
                             type="button"
                             variant="outlined"
-                            size="xs"
+                            size="md"
                             color="gray"
                             isDisabled
                         > Connecting...
@@ -39,13 +40,13 @@ export const NetworkButton = ({ networkState, setNetworkState }: NetworkButtonPr
                             <Button onPress={() => {
                                 setNetworkState(NetworkState.DISCONNECTING);
                                 disConnectMutation.mutate();
-                            }} type="button" variant="outlined" size="xs" color="red">
+                            }} type="button" variant="outlined" size="md" color="red">
                                 Disconnect
                             </Button> :
                             <Button
                                 type="button"
                                 variant="outlined"
-                                size="xs"
+                                size="md"
                                 color="gray"
                                 isDisabled
                             > Disconnecting...

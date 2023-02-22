@@ -15,7 +15,7 @@ export function CounterPage() {
     const abiElement = "<b>ABI</b>"
     const bytecodeElement = "<b>Bytecode</b>:"
 
-    useNetwork(network, setNetwork, setDeployState);
+    useNetwork(network, setNetwork, setDeployState, setCounter);
 
     return (
         <div className="ui" onClick={() => {
@@ -35,6 +35,13 @@ export function CounterPage() {
             <BoxCentered minHS>
                 <Stack align={"center"}>
                     {
+                        <NetworkButton
+                            setNetwork={setNetwork}
+                            networkState={networkState}
+                            setNetworkState={setNetworkState}
+                        />
+                    }
+                    {
                         !deployState
                         &&
                         (networkState === NetworkState.CAN_DISCONNECT || networkState === NetworkState.DISCONNECTING)
@@ -44,15 +51,9 @@ export function CounterPage() {
                         </>
                     }
                     {
-                        <NetworkButton
-                            networkState={networkState}
-                            setNetworkState={setNetworkState}
-                        />
-                    }
-                    {
                         network.includes("localhost")
                         &&
-                        (networkState === NetworkState.CAN_DISCONNECT || networkState === NetworkState.DISCONNECTING)
+                        (networkState === NetworkState.CAN_DISCONNECT || networkState === NetworkState.CONNECTING)
                         &&
                         <LocalFaucetButton />
                     }
@@ -62,7 +63,7 @@ export function CounterPage() {
                         (networkState === NetworkState.CAN_DISCONNECT || networkState === NetworkState.DISCONNECTING)
                         &&
                         <>
-                            <CountInfo contractId={contractId} />
+                            <CountInfo contractId={contractId} counter={counter} />
                             <IncrementButton amount={1} setCounter={setCounter} contractId={contractId} />
                         </>
                     }

@@ -3,10 +3,15 @@ import { useCounter } from "../hooks/contractFunctions";
 
 interface CountInfoProps {
     contractId: string;
+    counter: number;
 }
 
-export const CountInfo = ({ contractId }: CountInfoProps) => {
+export const CountInfo = ({ contractId, counter }: CountInfoProps) => {
     let count = useCounter(contractId);
+
+    if (counter === 0 && count !== undefined) {
+        count = 0;
+    }
 
     return (
         <>
