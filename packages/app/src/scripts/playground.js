@@ -107,10 +107,10 @@ incremented
 
 <b>ABI</b>
 ${response.abi}`;
-                    document.getElementsByClassName("ui").item(0).click();
                 }
 
                 document.getElementById("result").innerHTML = result;
+                document.getElementsByClassName("ui").item(0).click();
             })
             .catch((error) => {
                 result = error;

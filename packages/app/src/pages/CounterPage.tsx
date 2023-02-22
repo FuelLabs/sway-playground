@@ -64,7 +64,6 @@ export function CounterPage() {
                         <>
                             <CountInfo contractId={contractId} />
                             <IncrementButton amount={1} setCounter={setCounter} contractId={contractId} />
-                            {network.includes("localhost") && <LocalFaucetButton />}
                         </>
                     }
                 </Stack>
