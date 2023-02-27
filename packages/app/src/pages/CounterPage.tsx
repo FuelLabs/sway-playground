@@ -3,35 +3,46 @@ import { useState } from "react";
 import { CountInfo, DeployButton, IncrementButton, LocalFaucetButton, NetworkButton } from "../components";
 import useNetwork from "../hooks/wallet/useNetwork";
 import { NetworkState } from "../utils";
+import { onCompile } from "../utils/onCompile";
+
+export function save_abi(abi: string) {
+    localStorage.setItem("playground_abi", abi);
+}
+
+export function load_abi() {
+    return localStorage.getItem("playground_abi") || "";
+}
+
+export function save_bytecode(bytecode: string) {
+    localStorage.setItem("playground_bytecode", bytecode);
+}
+
+export function load_bytecode() {
+    return localStorage.getItem("playground_bytecode") || "";
+}
 
 export function CounterPage() {
     const [counter, setCounter] = useState(0);
-    const [abi, setAbi] = useState("");
-    const [bytecode, setBytecode] = useState("");
+    const [abi, setAbi] = useState(load_abi());
+    const [bytecode, setBytecode] = useState(load_bytecode());
     const [contractId, setContractId] = useState("");
     const [network, setNetwork] = useState("");
     const [networkState, setNetworkState] = useState(NetworkState.CAN_CONNECT);
     const [deployState, setDeployState] = useState(false);
-    const abiElement = "<b>ABI</b>"
-    const bytecodeElement = "<b>Bytecode</b>:"
 
     useNetwork(network, setNetwork, setDeployState, setCounter);
 
     return (
-        <div className="ui" onClick={() => {
-            let editorHTML = document.getElementById("result")?.innerHTML;
-            if (editorHTML === undefined) {
-                return <></>;
-            }
-            let bytecodeIndex = editorHTML.indexOf(bytecodeElement);
-            let bytecodeStartIndex = bytecodeIndex + bytecodeElement.length + 1;
-            let abiIndex = editorHTML.indexOf(abiElement);
-            let abiStartIndex = abiIndex + abiElement.length + 1;
-            let bytecodeEndIndex = abiIndex - 2;
-
-            setAbi(editorHTML.substring(abiStartIndex));
-            setBytecode(editorHTML.substring(bytecodeStartIndex, bytecodeEndIndex));
-        }}>
+        <div>
+            <div
+                className="ui"
+                onClick={() => {
+                    let program = onCompile(setAbi, setBytecode, setDeployState);
+                    if (!program) {
+                        return <></>;
+                    }
+                }}></div>
+            <a id="types" ></a>
             <BoxCentered minHS>
                 <Stack align={"center"}>
                     {

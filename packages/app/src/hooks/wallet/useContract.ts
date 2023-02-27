@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useWallet } from "./useWallet";
+import { Swaypad } from "../../utils/interface";
 
-export const useContract = (contractId: string, factory: any) => {
+export const useContract = (contractId: string) => {
     const { wallet, isLoading, isError } = useWallet();
 
     const {
@@ -9,9 +10,9 @@ export const useContract = (contractId: string, factory: any) => {
         isLoading: isContractLoading,
         isError: isContractError,
     } = useQuery(
-        ["contract", wallet],
-        () => {
-            return factory.connect(contractId, wallet!);
+        ["contract", contractId],
+        async () => {
+            return Swaypad.contract.connect(contractId, wallet!);
         },
         {
             enabled: !isLoading && !isError && !!wallet,

@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, ThemeProvider } from "@fuel-ui/react";
+import { Box, ThemeProvider } from "@fuel-ui/react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./utils/queryClient";
 import { CounterPage, EditorPage } from "./pages";

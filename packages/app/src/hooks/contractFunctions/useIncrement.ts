@@ -1,6 +1,5 @@
 import { toast } from "@fuel-ui/react";
 import { useMutation } from "@tanstack/react-query";
-import { SwaypadAbi__factory } from "../../contracts";
 import { panicError, queryClient } from "../../utils/queryClient";
 import { useContract } from "../wallet";
 
@@ -9,12 +8,11 @@ export const useIncrement = (
     setCounter: React.Dispatch<React.SetStateAction<number>>,
     contractId: string
 ) => {
-    const { contract } = useContract(contractId, SwaypadAbi__factory);
+    const { contract } = useContract(contractId);
 
     const mutation = useMutation(
         async () => {
             if (!contract) throw new Error("Contract not connected");
-
             const transactionResult = await contract.functions
                 .increment(amount)
                 .call();

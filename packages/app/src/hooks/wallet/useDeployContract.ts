@@ -24,13 +24,9 @@ export const useDeployContract = (
                 wallet
             );
 
-            console.log("Deploy contract");
-
             const contract = await contractFactory.deployContract({
                 storageSlots: [],
             });
-
-            console.log("Contract successfully deployed");
 
             return contract.id.toB256();
         },
@@ -53,7 +49,6 @@ export const useDeployContract = (
 
     function handleSuccess(data: any) {
         setDeployState(true);
-        console.log("Deployed contract ID: " + data);
         setContractId(data);
     }
 

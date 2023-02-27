@@ -15,19 +15,23 @@ export const useConnection = (
     const mutation = useMutation(
         async () => {
             const isConnected = await fuel.isConnected();
-            if (!connect && isConnected) {
-                setNetworkState(NetworkState.DISCONNECTING);
-                await fuel.disconnect();
-                return "";
-            } else if (connect && !isConnected) {
-                setNetworkState(NetworkState.CONNECTING);
-                await fuel.connect();
+            if (connect) {
+                if (!isConnected) {
+                    setNetworkState(NetworkState.CONNECTING);
+                    await fuel.connect();
+                }
                 let provider = await fuel.getProvider();
                 if (provider !== undefined && provider !== null) {
                     return provider.url;
                 }
+                return "";
+            } else {
+                if (isConnected) {
+                    setNetworkState(NetworkState.DISCONNECTING);
+                    await fuel.disconnect();
+                }
+                return "";
             }
-            return "";
         },
         {
             onSuccess: (data) => {
