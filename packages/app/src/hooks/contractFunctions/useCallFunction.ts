@@ -1,21 +1,37 @@
 import { toast } from "@fuel-ui/react";
 import { useMutation } from "@tanstack/react-query";
-import { panicError, queryClient } from "../../utils/queryClient";
+import { panicError } from "../../utils";
 import { useContract } from "../wallet";
 
-export const useIncrement = (
-    amount: number,
-    setCounter: React.Dispatch<React.SetStateAction<number>>,
-    contractId: string
-) => {
+interface CallFunctionProps {
+    contractId: string;
+    name: string;
+    type: "call" | "get";
+    getParams: any;
+    formId: string;
+    value: any;
+    setValue: any;
+}
+
+export const useCallFunction = ({
+    contractId,
+    name,
+    type,
+    getParams,
+    formId,
+    value,
+    setValue,
+}: CallFunctionProps) => {
     const { contract } = useContract(contractId);
 
     const mutation = useMutation(
         async () => {
             if (!contract) throw new Error("Contract not connected");
-            const transactionResult = await contract.functions
-                .increment(amount)
-                .call();
+            const params = getParams();
+
+            const transactionResult = await contract["functions"]
+                [name](...params)
+                [type]();
             return transactionResult;
         },
         {
@@ -32,11 +48,14 @@ export const useIncrement = (
             duration: 100000000,
             id: msg,
         });
+        setValue({
+            ...value,
+            [formId]: `error: ${JSON.stringify(error?.message)}`,
+        });
     }
 
     function handleSuccess(data: any) {
-        queryClient.refetchQueries(["counter"], { exact: true });
-        setCounter(Number(data.value));
+        setValue({ [formId]: String(data.value) });
     }
 
     return mutation;

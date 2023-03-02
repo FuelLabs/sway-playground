@@ -5,8 +5,7 @@ import { toast } from "@fuel-ui/react";
 function useNetwork(
     network: string,
     setNetwork: React.Dispatch<React.SetStateAction<string>>,
-    setDeployState: React.Dispatch<React.SetStateAction<boolean>>,
-    setCounter: React.Dispatch<React.SetStateAction<number>>
+    setDeployState: React.Dispatch<React.SetStateAction<boolean>>
 ) {
     const [fuel] = useFuel();
 
@@ -15,7 +14,6 @@ function useNetwork(
     const handleNetworkChange = async (network: any) => {
         setNetwork(network.url);
         setDeployState(false);
-        setCounter(0);
     };
 
     useEffect(() => {

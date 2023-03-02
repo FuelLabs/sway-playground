@@ -16,9 +16,6 @@ export function EditorPage() {
                 </button>
 
                 <div className="nav_right">
-                    {/* <button id="share" class="nav_button">
-                    SHARE
-                </button> */}
                     <button id="reset" className="nav_button">RESET</button>
                 </div>
             </div>

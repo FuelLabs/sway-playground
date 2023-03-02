@@ -1,2 +1,2 @@
-export * from "./CounterPage";
+export * from "./InterfacePage";
 export * from "./EditorPage";

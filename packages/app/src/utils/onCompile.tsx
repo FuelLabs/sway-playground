@@ -1,5 +1,5 @@
-import { save_abi, save_bytecode } from "../pages/CounterPage";
 import { Swaypad } from "./interface";
+import { saveAbi, saveBytecode } from "./localStorage";
 
 const abiElement = "<b>ABI</b>"
 const bytecodeElement = "<b>Bytecode</b>:"
@@ -27,8 +27,8 @@ export const onCompile = (
     setBytecode(bytecode);
     setDeployState(false);
 
-    save_abi(abi);
-    save_bytecode(bytecode);
+    saveAbi(abi);
+    saveBytecode(bytecode);
 
     Swaypad.contract = new Swaypad(abi);
 }

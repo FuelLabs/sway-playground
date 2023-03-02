@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useWallet } from "./useWallet";
-import { Swaypad } from "../../utils/interface";
+import { Swaypad } from "../../utils";
 
 export const useContract = (contractId: string) => {
     const { wallet, isLoading, isError } = useWallet();

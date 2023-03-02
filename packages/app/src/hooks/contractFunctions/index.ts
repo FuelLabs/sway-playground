@@ -1,2 +1,2 @@
-export * from "./useCounter";
-export * from "./useIncrement";
+export * from "./useCallFunction";
+export * from "./useContractFunctions";

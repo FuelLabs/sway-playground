@@ -1,7 +1,7 @@
 import { Box, ThemeProvider } from "@fuel-ui/react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./utils/queryClient";
-import { CounterPage, EditorPage } from "./pages";
+import { InterfacePage, EditorPage } from "./pages";
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
           <EditorPage />
         </Box>
         <Box css={{ height: "100%", width: "50%", right: "0", position: "fixed", overflow: "hidden" }}>
-          <CounterPage />
+          <InterfacePage />
         </Box>
       </ThemeProvider>
     </QueryClientProvider >

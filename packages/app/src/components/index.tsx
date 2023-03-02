@@ -1,5 +1,5 @@
-export * from "./CountInfo";
+export * from "./ContractFunctionButton";
+export * from "./ContractFunctions";
 export * from "./DeployButton";
-export * from "./IncrementButton";
 export * from "./LocalFaucetButton";
 export * from "./NetworkButton";

@@ -23,7 +23,7 @@ export const NetworkButton = ({ setNetwork, networkState, setNetworkState }: Net
                         }}
                         type="button"
                         variant="outlined"
-                        size="md"
+                        size="lg"
                         color="green"
                     > Connect
                     </Button> :
@@ -31,22 +31,28 @@ export const NetworkButton = ({ setNetwork, networkState, setNetworkState }: Net
                         <Button
                             type="button"
                             variant="outlined"
-                            size="md"
+                            size="lg"
                             color="gray"
                             isDisabled
                         > Connecting...
                         </Button> :
                         networkState === NetworkState.CAN_DISCONNECT ?
-                            <Button onPress={() => {
-                                setNetworkState(NetworkState.DISCONNECTING);
-                                disConnectMutation.mutate();
-                            }} type="button" variant="outlined" size="md" color="red">
+                            <Button
+                                onPress={() => {
+                                    setNetworkState(NetworkState.DISCONNECTING);
+                                    disConnectMutation.mutate();
+                                }}
+                                type="button"
+                                variant="outlined"
+                                size="lg"
+                                color="red"
+                            >
                                 Disconnect
                             </Button> :
                             <Button
                                 type="button"
                                 variant="outlined"
-                                size="md"
+                                size="lg"
                                 color="gray"
                                 isDisabled
                             > Disconnecting...
