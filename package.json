@@ -24,15 +24,11 @@
         "deps:update": "updates -gu && pnpm -r exec updates -gu",
         "dev:install": "pnpm install --filter=app",
         "dev": "pnpm run --filter=app dev",
-        "node:dev": "fuelhat node",
-        "nodes:start": "fuelhat node start -d && fuelhat node start -t -d",
-        "nodes:stop": "fuelhat node stop -d && fuelhat node stop -t -d",
         "nodes:reset": "pnpm nodes:stop && pnpm nodes:start",
         "server:debug": "cargo build && cargo run --bin sway-playground",
         "server:start": "cargo run"
     },
     "dependencies": {
-        "fuelhat": "workspace:*",
         "http-server": "^14.1.1"
     },
     "devDependencies": {
