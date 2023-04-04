@@ -14,30 +14,30 @@ window.addEventListener("load", function () {
 
     const default_contract = `contract;
 
-    abi MyContract {
-        #[storage(read)]
-        fn counter() -> u64;
+abi MyContract {
+    #[storage(read)]
+    fn counter() -> u64;
     
-        #[storage(read, write)]
-        fn increment(param: u64) -> u64;
+    #[storage(read, write)]
+    fn increment(param: u64) -> u64;
+}
+    
+storage {
+    counter: u64 = 0,
+}
+    
+impl MyContract for Contract {
+    #[storage(read)]
+    fn counter() -> u64 {
+        storage.counter
     }
     
-    storage {
-        counter: u64 = 0,
+    #[storage(read, write)]
+    fn increment(param: u64) -> u64 {
+        storage.counter += param;
+        storage.counter
     }
-    
-    impl MyContract for Contract {
-        #[storage(read)]
-        fn counter() -> u64 {
-            storage.counter
-        }
-    
-        #[storage(read, write)]
-        fn increment(param: u64) -> u64 {
-            storage.counter += param;
-            storage.counter
-        }
-    }`;
+}`;
 
     const loaded_contract =
         load_contract().length == 0 ? default_contract : load_contract();
