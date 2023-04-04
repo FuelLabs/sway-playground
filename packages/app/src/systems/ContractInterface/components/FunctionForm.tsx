@@ -26,7 +26,6 @@ export function FunctionForm({
 
     // TODO: handle submit
     function onSubmit(data: any) {
-        console.log(data);
     }
 
     return (

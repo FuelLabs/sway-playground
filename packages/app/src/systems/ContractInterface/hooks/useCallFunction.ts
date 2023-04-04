@@ -64,7 +64,6 @@ export function useCallFunction({
     }
 
     function handleSuccess(data: any) {
-        console.log(data.value);
         setFunctionValue({
             [contractId + functionName]: JSON.stringify(
                 data.value,
