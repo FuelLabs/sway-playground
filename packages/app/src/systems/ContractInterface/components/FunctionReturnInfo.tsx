@@ -1,4 +1,4 @@
-import { Card } from "@fuel-ui/react";
+import { Card, Spinner } from "@fuel-ui/react";
 
 interface FunctionReturnInfoProps {
     functionValue: string;
@@ -7,7 +7,14 @@ interface FunctionReturnInfoProps {
 export function FunctionReturnInfo({ functionValue }: FunctionReturnInfoProps) {
     return (
         <Card>
-            <Card.Body>{functionValue || ""}</Card.Body>
+            <Card.Body>
+                {(functionValue === ""
+                    &&
+                    <Spinner />
+                )
+                    || functionValue
+                }
+            </Card.Body>
         </Card>
     );
 }

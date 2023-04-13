@@ -30,6 +30,8 @@ export function useCallFunction({
         async () => {
             if (!contract) throw new Error("Contract not connected");
 
+            setFunctionValue({ [contractId + functionName]: "" });
+
             const functionParameters = getFunctionParameters(
                 inputInstances,
                 watch,
