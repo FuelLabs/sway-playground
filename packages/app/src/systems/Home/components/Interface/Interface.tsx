@@ -5,7 +5,6 @@ import { NetworkState, NetworkSystem, useNetwork } from "../../../Connection";
 import { ContractInterface } from "../../../ContractInterface";
 import { loadAbi, loadBytecode, onCompile } from "../../../Core";
 import { DeploySystem } from "../../../Deployment";
-import { LocalFaucetButton } from "../../../Faucet";
 
 export function Interface() {
     const [abi, setAbi] = useState(loadAbi());
