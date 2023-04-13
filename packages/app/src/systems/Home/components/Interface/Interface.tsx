@@ -38,14 +38,6 @@ export function Interface() {
                         />
                     }
                     {
-                        (network.includes("localhost") || network.includes("127.0.0.1"))
-                        &&
-                        (networkState === NetworkState.CAN_DISCONNECT
-                            || networkState === NetworkState.CONNECTING)
-                        &&
-                        <LocalFaucetButton />
-                    }
-                    {
                         (networkState === NetworkState.CAN_DISCONNECT
                             || networkState === NetworkState.DISCONNECTING)
                         &&
