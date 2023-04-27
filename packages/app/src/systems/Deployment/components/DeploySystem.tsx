@@ -1,13 +1,14 @@
 import { Copyable, Text } from "@fuel-ui/react";
-import { DeployButton, UseDeployedContractButton, UseDeployedContractForm } from ".";
+import { DeployButton, DeployingButton, UseDeployedContractButton, UseDeployedContractForm } from ".";
+import { DeployState } from "../utils";
 
 interface DeploySystemProps {
     abi: string,
     bytecode: string,
     contractId: string,
     setContractId: React.Dispatch<React.SetStateAction<string>>,
-    deployState: boolean,
-    setDeployState: React.Dispatch<React.SetStateAction<boolean>>
+    deployState: DeployState,
+    setDeployState: React.Dispatch<React.SetStateAction<DeployState>>
 }
 
 export function DeploySystem({
@@ -20,31 +21,32 @@ export function DeploySystem({
 }: DeploySystemProps) {
     return (
         <>
+
             {
-                !deployState &&
-                <>
-                    <DeployButton
-                        abi={abi}
-                        bytecode={bytecode}
-                        setContractId={setContractId}
-                        setDeployState={setDeployState}
-                    />
-                    <Text> or </Text>
-                    <UseDeployedContractForm />
-                    <UseDeployedContractButton
-                        abi={abi}
-                        bytecode={bytecode}
-                        setContractId={setContractId}
-                        setDeployState={setDeployState}
-                    />
-                </>
-            }
-            {
-                deployState &&
-                <>
-                    <Text>Contract with address </Text>
-                    <Copyable value={contractId}>{contractId}</Copyable>
-                </>
+                deployState === DeployState.NOT_DEPLOYED ?
+                    <>
+                        <DeployButton
+                            abi={abi}
+                            bytecode={bytecode}
+                            setContractId={setContractId}
+                            setDeployState={setDeployState}
+                        />
+                        <Text> or </Text>
+                        <UseDeployedContractForm />
+                        <UseDeployedContractButton
+                            abi={abi}
+                            bytecode={bytecode}
+                            setContractId={setContractId}
+                            setDeployState={setDeployState}
+                        />
+                    </>
+                    : deployState === DeployState.DEPLOYING ?
+                        <DeployingButton />
+                        :
+                        <>
+                            <Text>Contract with address </Text>
+                            <Copyable value={contractId}>{contractId}</Copyable>
+                        </>
             }
         </>
     );

@@ -1,9 +1,10 @@
 import { Button } from "@fuel-ui/react";
 import { NetworkState } from "../utils";
 import { useConnection } from "../hooks";
+import { DeployState } from "../../Deployment";
 
 interface DisconnectButtonProps {
-    setDeployState: React.Dispatch<React.SetStateAction<boolean>>;
+    setDeployState: React.Dispatch<React.SetStateAction<DeployState>>;
     setNetwork: React.Dispatch<React.SetStateAction<string>>;
     setNetworkState: React.Dispatch<React.SetStateAction<NetworkState>>;
 }

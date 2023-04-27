@@ -4,7 +4,7 @@ import { useState } from "react";
 import { NetworkState, NetworkSystem, useNetwork } from "../../../Connection";
 import { ContractInterface } from "../../../ContractInterface";
 import { loadAbi, loadBytecode, onCompile } from "../../../Core";
-import { DeploySystem } from "../../../Deployment";
+import { DeployState, DeploySystem } from "../../../Deployment";
 
 export function Interface() {
     const [abi, setAbi] = useState(loadAbi());
@@ -12,7 +12,7 @@ export function Interface() {
     const [contractId, setContractId] = useState("");
     const [network, setNetwork] = useState("");
     const [networkState, setNetworkState] = useState(NetworkState.CAN_CONNECT);
-    const [deployState, setDeployState] = useState(false);
+    const [deployState, setDeployState] = useState(DeployState.NOT_DEPLOYED);
     useNetwork(setNetwork, setDeployState);
 
     function onContractCompile() {
@@ -50,7 +50,7 @@ export function Interface() {
                         />
                     }
                     {
-                        deployState
+                        deployState === DeployState.DEPLOYED
                         &&
                         (networkState === NetworkState.CAN_DISCONNECT
                             || networkState === NetworkState.DISCONNECTING)

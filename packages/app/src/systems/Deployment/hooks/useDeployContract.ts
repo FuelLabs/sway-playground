@@ -1,13 +1,13 @@
 import { ContractFactory, JsonAbi } from "fuels";
-import { toast } from "@fuel-ui/react";
 import { useMutation } from "@tanstack/react-query";
-import { panicError, useWallet } from "../../Core";
+import { displayError, useWallet } from "../../Core";
+import { DeployState } from "../utils";
 
 export function useDeployContract(
     abi: string,
     bytecode: string,
     setContractId: React.Dispatch<React.SetStateAction<string>>,
-    setDeployState: React.Dispatch<React.SetStateAction<boolean>>
+    setDeployState: React.Dispatch<React.SetStateAction<DeployState>>
 ) {
     const { wallet } = useWallet();
 
@@ -38,16 +38,12 @@ export function useDeployContract(
     );
 
     function handleError(error: any) {
-        setDeployState(false);
-        const msg = error?.message;
-        toast.error(msg?.includes("Panic") ? panicError(msg) : msg, {
-            duration: 100000000,
-            id: msg,
-        });
+        setDeployState(DeployState.NOT_DEPLOYED);
+        displayError(error);
     }
 
     function handleSuccess(data: any) {
-        setDeployState(true);
+        setDeployState(DeployState.DEPLOYED);
         setContractId(data);
     }
 

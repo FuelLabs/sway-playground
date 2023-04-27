@@ -1,8 +1,9 @@
 import { NetworkState } from "../utils";
 import { ConnectButton, ConnectingButton, DisconnectButton, DisconnectingButton } from ".";
+import { DeployState } from "../../Deployment";
 
 interface NetworkButtonProps {
-    setDeployState: React.Dispatch<React.SetStateAction<boolean>>;
+    setDeployState: React.Dispatch<React.SetStateAction<DeployState>>;
     setNetwork: React.Dispatch<React.SetStateAction<string>>;
     networkState: NetworkState;
     setNetworkState: React.Dispatch<React.SetStateAction<NetworkState>>;

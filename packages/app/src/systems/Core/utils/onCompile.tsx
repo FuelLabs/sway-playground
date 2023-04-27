@@ -1,3 +1,4 @@
+import { DeployState } from "../../Deployment";
 import { Swaypad } from "./interface";
 import { saveAbi, saveBytecode } from "./localStorage";
 
@@ -7,7 +8,7 @@ const bytecodeElement = "<b>Bytecode</b>:"
 export function onCompile(
     setAbi: React.Dispatch<React.SetStateAction<string>>,
     setBytecode: React.Dispatch<React.SetStateAction<string>>,
-    setDeployState: React.Dispatch<React.SetStateAction<boolean>>,
+    setDeployState: React.Dispatch<React.SetStateAction<DeployState>>,
 ) {
     let editorHTML = document.getElementById("result")?.innerHTML;
     if (editorHTML === undefined) {
@@ -25,7 +26,7 @@ export function onCompile(
 
     setAbi(abi);
     setBytecode(bytecode);
-    setDeployState(false);
+    setDeployState(DeployState.NOT_DEPLOYED);
 
     saveAbi(abi);
     saveBytecode(bytecode);

@@ -1,16 +1,17 @@
 import { toast } from "@fuel-ui/react";
 import { useMutation } from "@tanstack/react-query";
-import { panicError, useFuel } from "../../Core";
+import { displayError, useFuel } from "../../Core";
 import { NetworkState } from "../utils";
+import { DeployState } from "../../Deployment";
 
 export function useConnection(
     connect: boolean,
     setNetwork: React.Dispatch<React.SetStateAction<string>>,
     setNetworkState: React.Dispatch<React.SetStateAction<NetworkState>>,
-    setDeployState: React.Dispatch<React.SetStateAction<boolean>> = () => {}
+    setDeployState: React.Dispatch<React.SetStateAction<DeployState>>
 ) {
     const [fuel] = useFuel();
-    if (!fuel) toast.error("Error fuelWeb3 instance is not defined");
+    if (!fuel) toast.error("Fuel wallet could not be found");
 
     const mutation = useMutation(
         async () => {
@@ -42,11 +43,7 @@ export function useConnection(
     );
 
     function handleError(error: any) {
-        const msg = error?.message;
-        toast.error(msg?.includes("Panic") ? panicError(msg) : msg, {
-            duration: 100000000,
-            id: msg,
-        });
+        displayError(error);
         if (connect) {
             setNetworkState(NetworkState.CAN_CONNECT);
         }
@@ -56,7 +53,7 @@ export function useConnection(
         if (data === "") {
             setNetwork("");
             setNetworkState(NetworkState.CAN_CONNECT);
-            setDeployState(false);
+            setDeployState(DeployState.NOT_DEPLOYED);
         } else {
             setNetwork(data);
             setNetworkState(NetworkState.CAN_DISCONNECT);

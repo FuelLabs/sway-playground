@@ -1,8 +1,7 @@
-import { toast } from "@fuel-ui/react";
 import { useMutation } from "@tanstack/react-query";
 import { FieldValues, UseFormWatch } from "react-hook-form";
 import { useContract } from ".";
-import { panicError } from "../../Core";
+import { displayError } from "../../Core";
 import { getFunctionParameters, modifyJsonStringify } from "../utils";
 
 interface CallFunctionProps {
@@ -52,11 +51,7 @@ export function useCallFunction({
     );
 
     function handleError(error: any) {
-        const msg = error?.message;
-        toast.error(msg?.includes("Panic") ? panicError(msg) : msg, {
-            duration: 100000000,
-            id: msg,
-        });
+        displayError(error);
         setFunctionValue({
             ...functionValue,
             [contractId + functionName]: `error: ${JSON.stringify(

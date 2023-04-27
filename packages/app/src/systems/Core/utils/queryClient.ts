@@ -1,16 +1,16 @@
 import { QueryClient } from "react-query";
-import { handleError } from ".";
+import { displayError } from ".";
 
 export const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
-            onError: handleError,
+            onError: displayError,
             retry: false,
             refetchOnWindowFocus: false,
             structuralSharing: false,
         },
         mutations: {
-            onError: handleError,
+            onError: displayError,
         },
     },
 });

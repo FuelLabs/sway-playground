@@ -1,18 +1,19 @@
 import { toast } from "@fuel-ui/react";
 import { useEffect } from "react";
 import { useFuel } from "../../Core";
+import { DeployState } from "../../Deployment";
 
 export function useNetwork(
     setNetwork: React.Dispatch<React.SetStateAction<string>>,
-    setDeployState: React.Dispatch<React.SetStateAction<boolean>>
+    setDeployState: React.Dispatch<React.SetStateAction<DeployState>>
 ) {
     const [fuel] = useFuel();
 
-    if (!fuel) toast.error("Error fuelWeb3 instance is not defined");
+    if (!fuel) toast.error("Fuel wallet could not be found");
 
     const handleNetworkChange = async (network: any) => {
         setNetwork(network.url);
-        setDeployState(false);
+        setDeployState(DeployState.NOT_DEPLOYED);
     };
 
     useEffect(() => {

@@ -5,7 +5,7 @@ import { useFuel } from "./useFuel";
 export function useProvider() {
     const [fuel] = useFuel();
 
-    if (!fuel) toast.error("Error fuelWeb3 instance is not defined");
+    if (!fuel) toast.error("Fuel wallet could not be found");
 
     const {
         data: provider,

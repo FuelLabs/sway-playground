@@ -1,11 +1,13 @@
-import { Button } from "@fuel-ui/react";
+import { Button, Spinner } from "@fuel-ui/react";
 import { parseAddress } from "../../Core";
+import { DeployState } from "../utils";
+import { useState } from "react";
 
 interface UseDeployedContractButtonProps {
     abi: string,
     bytecode: string,
     setContractId: React.Dispatch<React.SetStateAction<string>>,
-    setDeployState: React.Dispatch<React.SetStateAction<boolean>>
+    setDeployState: React.Dispatch<React.SetStateAction<DeployState>>
 }
 
 export function UseDeployedContractButton({
@@ -19,7 +21,7 @@ export function UseDeployedContractButton({
         const id = document.querySelector<HTMLInputElement>("#deployedContractId")?.value;
         if (id && parseAddress(id)) {
             setContractId(id);
-            setDeployState(true);
+            setDeployState(DeployState.DEPLOYING);
         }
     }
 
