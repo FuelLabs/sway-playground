@@ -1,5 +1,5 @@
 import { cssObj } from "@fuel-ui/css";
-import { Stack } from "@fuel-ui/react";
+import { Flex } from "@fuel-ui/react";
 import { FieldValues, UseFormWatch } from "react-hook-form";
 import { FunctionButton } from ".";
 
@@ -25,7 +25,7 @@ export function FunctionButtons({
     watch
 }: FunctionButtonsProps) {
     return (
-        <Stack css={styles.functionButtons}>
+        <Flex gap={"$10"} css={styles.functionButtons}>
             <FunctionButton
                 inputInstances={inputInstances}
                 contractId={contractId}
@@ -44,13 +44,12 @@ export function FunctionButtons({
                 setFunctionValue={setFunctionValue}
                 watch={watch}
             />
-        </Stack>
+        </Flex>
     );
 }
 
 const styles = {
     functionButtons: cssObj({
-        width: "80%",
         alignSelf: "center",
     })
 }

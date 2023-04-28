@@ -1,14 +1,16 @@
 import { Button } from "@fuel-ui/react";
 import { NetworkState } from "../utils";
 import { useConnection } from "../hooks";
+import { DeployState } from "../../Deployment";
 
 interface ConnectButtonProps {
+    setDeployState: React.Dispatch<React.SetStateAction<DeployState>>;
     setNetwork: React.Dispatch<React.SetStateAction<string>>;
     setNetworkState: React.Dispatch<React.SetStateAction<NetworkState>>;
 }
 
-export function ConnectButton({ setNetwork, setNetworkState }: ConnectButtonProps) {
-    const connectMutation = useConnection(true, setNetwork, setNetworkState);
+export function ConnectButton({ setNetwork, setNetworkState, setDeployState }: ConnectButtonProps) {
+    const connectMutation = useConnection(true, setNetwork, setNetworkState, setDeployState);
 
     function onConnectButtonPress() {
         setNetworkState(NetworkState.CONNECTING);
@@ -19,10 +21,8 @@ export function ConnectButton({ setNetwork, setNetworkState }: ConnectButtonProp
         <Button
             onPress={onConnectButtonPress}
             type="button"
-            variant="outlined"
-            size="lg"
             color="green"
-        > Connect
+        > CONNECT
         </Button>
     );
 }

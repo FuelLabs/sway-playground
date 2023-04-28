@@ -1,8 +1,11 @@
 import { FieldValues, UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { isFunctionPrimitive } from "../utils";
-import { Box, Flex, Stack, Text } from "@fuel-ui/react";
+import { Stack, Text, Icon, Box } from "@fuel-ui/react";
 import { FunctionParameterPrimitive } from "./FunctionParameterPrimitive";
 import { cssObj } from "@fuel-ui/css";
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary/AccordionSummary";
 
 interface FunctionParameterNestedProps {
     name: string;
@@ -20,39 +23,48 @@ export function FunctionParameterNested({
     setValue
 }: FunctionParameterNestedProps) {
     if (isFunctionPrimitive(input)) {
-        return (<FunctionParameterPrimitive name={name} input={input} register={register} setValue={setValue} />);
+        return (
+            <FunctionParameterPrimitive
+                name={name}
+                input={input}
+                register={register}
+                setValue={setValue}
+            />
+        );
     }
+
     return (
-        <Flex gap="$5" css={styles.functionParameterFlex}>
-            <Box css={styles.functionParameterName}>
+        <Stack gap="$1" css={styles.parameters}>
+            <Box css={{ alignSelf: "center" }}>
                 <Text> {input.name} </Text>
             </Box>
-            <Stack css={styles.functionParametersStack}>
-                {input.components.map((field: any, fieldIndex: number) => {
-                    let fieldName = input.name + index + field.name + fieldIndex;
-                    return <FunctionParameterNested
-                        key={fieldName}
-                        name={`${name}.${field.name}`}
-                        input={field}
-                        index={fieldIndex}
-                        register={register}
-                        setValue={setValue}
-                    />;
-                })}
-            </Stack>
-        </Flex>
+            <Accordion style={{ backgroundColor: "black" }}>
+                <AccordionSummary expandIcon={<Icon icon="CaretDown" style={{ color: "white" }} />} />
+                <AccordionDetails>
+                    <Stack gap="$5">
+                        {input.components.map((field: any, fieldIndex: number) => {
+                            let fieldName = input.name + index + field.name + fieldIndex;
+                            return (
+                                <FunctionParameterNested
+                                    key={fieldName}
+                                    name={`${name}.${field.name}`}
+                                    input={field}
+                                    index={fieldIndex}
+                                    register={register}
+                                    setValue={setValue}
+                                />
+                            );
+                        })}
+                    </Stack>
+                </AccordionDetails>
+            </Accordion>
+        </Stack>
     );
 }
 
 const styles = {
-    functionParameterFlex: cssObj({
+    parameters: cssObj({
         width: "100%",
-        align: "right"
-    }),
-    functionParameterName: cssObj({
-        alignSelf: "center",
-    }),
-    functionParametersStack: cssObj({
-        width: "100%",
+        alignContent: "center",
     }),
 }

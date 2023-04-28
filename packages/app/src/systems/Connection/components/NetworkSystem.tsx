@@ -21,6 +21,7 @@ export function NetworkSystem({
             {
                 networkState === NetworkState.CAN_CONNECT ?
                     <ConnectButton
+                        setDeployState={setDeployState}
                         setNetwork={setNetwork}
                         setNetworkState={setNetworkState}
                     />

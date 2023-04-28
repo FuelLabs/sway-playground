@@ -1,7 +1,6 @@
-import { Button, Spinner } from "@fuel-ui/react";
-import { parseAddress } from "../../Core";
+import { Button } from "@fuel-ui/react";
+import { displayError, parseAddress } from "../../Core";
 import { DeployState } from "../utils";
-import { useState } from "react";
 
 interface UseDeployedContractButtonProps {
     abi: string,
@@ -21,7 +20,10 @@ export function UseDeployedContractButton({
         const id = document.querySelector<HTMLInputElement>("#deployedContractId")?.value;
         if (id && parseAddress(id)) {
             setContractId(id);
-            setDeployState(DeployState.DEPLOYING);
+            setDeployState(DeployState.DEPLOYED);
+        }
+        else {
+            displayError("Invalid contract address");
         }
     }
 
@@ -33,7 +35,7 @@ export function UseDeployedContractButton({
             color="accent"
             isDisabled={!abi || !bytecode}
         >
-            Use Deployed Contract
+            USE CONTRACT
         </Button>
     );
 };

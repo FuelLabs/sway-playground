@@ -3,6 +3,7 @@ import { Contract, FunctionFragment } from "fuels";
 import { useState } from "react";
 import { FunctionForm, FunctionReturnInfo } from ".";
 import { getInstantiableType, isFunctionPrimitive } from "../utils";
+import { cssObj } from "@fuel-ui/css";
 
 export function FunctionInterface(
     contract: Contract | undefined,
@@ -39,7 +40,12 @@ export function FunctionInterface(
         <>
             {
                 contract !== undefined && functionName !== undefined &&
-                <Stack key={functionName} className={functionName}>
+                <Stack
+                    key={functionName}
+                    className={functionName}
+                    css={styles.interface}
+                    gap="$0"
+                >
                     <FunctionForm
                         contractId={contract.id.toString()}
                         functionName={functionName}
@@ -47,9 +53,19 @@ export function FunctionInterface(
                         functionValue={functionValue}
                         setFunctionValue={setFunctionValue}
                     />
-                    <FunctionReturnInfo functionValue={functionValue[contract.id + functionName]} />
+                    <FunctionReturnInfo
+                        functionValue={functionValue[contract.id + functionName]}
+                    />
                 </Stack >
             }
         </>
     );
+}
+
+const styles = {
+    interface: cssObj({
+        border: "4px solid darkgrey",
+        borderRadius: "5px",
+        maxWidth: "100%",
+    }),
 }

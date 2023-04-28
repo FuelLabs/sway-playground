@@ -21,11 +21,9 @@ export function DisconnectButton({ setDeployState, setNetwork, setNetworkState }
         <Button
             onPress={onDisconnectButtonPress}
             type="button"
-            variant="outlined"
-            size="lg"
             color="red"
         >
-            Disconnect
+            DISCONNECT
         </Button>
     );
 }

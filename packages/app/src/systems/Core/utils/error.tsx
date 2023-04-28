@@ -5,7 +5,7 @@ export function panicError(msg: string) {
 };
 
 export function displayError(error: any) {
-    const msg = error?.message;
+    const msg = error?.message || error;
     toast.error(msg?.includes("Panic") ? panicError(msg) : msg, {
         duration: 100000000,
         id: msg,

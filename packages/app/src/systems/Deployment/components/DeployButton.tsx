@@ -26,11 +26,10 @@ export function DeployButton({
         <Button
             onPress={onDeployButtonPress}
             type="button"
-            size="md"
             color="accent"
             isDisabled={!abi || !bytecode}
         >
-            Deploy
+            DEPLOY
         </Button>
     );
 };

@@ -1,5 +1,5 @@
 import { cssObj } from "@fuel-ui/css";
-import { Form, Box, Heading, Flex } from "@fuel-ui/react";
+import { Form, Box, Heading, Stack } from "@fuel-ui/react";
 import { useForm } from "react-hook-form";
 import { FunctionButtons, FunctionParameters } from ".";
 
@@ -32,9 +32,9 @@ export function FunctionForm({
         <Box as="form" onSubmit={(handleSubmit(onSubmit))}>
             <Form.Control className={contractId + functionName} >
                 <Form.Label htmlFor={functionName} css={styles.functionLabel}>
-                    <Heading as="h3" css={styles.functionHeading}>{functionName}</Heading>
+                    <Heading as="h4" css={styles.functionHeading}>{functionName}</Heading>
                 </Form.Label>
-                <Flex justify="right" gap={"$5"}>
+                <Stack gap={"$6"}>
                     <FunctionParameters
                         inputInstances={inputInstances}
                         functionName={functionName}
@@ -49,7 +49,7 @@ export function FunctionForm({
                         setFunctionValue={setFunctionValue}
                         watch={watch}
                     />
-                </Flex>
+                </Stack>
             </Form.Control>
         </Box>
     );
@@ -60,6 +60,6 @@ const styles = {
         justifyContent: "center",
     }),
     functionHeading: cssObj({
-        color: "gray",
+        color: "$gray7",
     })
 }

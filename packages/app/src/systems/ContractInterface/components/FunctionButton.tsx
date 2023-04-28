@@ -38,8 +38,12 @@ export function FunctionButton({
     return (
         <>
             {
-                <Button onPress={onFunctionButtonPress} type="submit" size="sm">
-                    {type}
+                <Button
+                    onPress={onFunctionButtonPress}
+                    type="submit"
+                    size="xs"
+                >
+                    {type.toUpperCase()}
                 </Button>
             }
         </>

@@ -1,5 +1,5 @@
 import { cssObj } from "@fuel-ui/css";
-import { Box, Flex, Text, Input, Checkbox } from "@fuel-ui/react";
+import { Box, Stack, Text, Input, Checkbox } from "@fuel-ui/react";
 import { FieldValues, UseFormRegister, UseFormSetValue } from "react-hook-form";
 
 interface FunctionParameterPrimitiveProps {
@@ -15,16 +15,15 @@ export function FunctionParameterPrimitive({
     register,
     setValue }: FunctionParameterPrimitiveProps) {
     return (
-        <Flex gap="$5" css={styles.primitiveParameterFlex}>
-            <Box css={styles.primitiveParameterBox}>
+        <Stack gap="$1" css={styles.flex}>
+            <Box css={styles.box}>
                 <Text> {input.name} </Text>
             </Box>
             {input.type.type === "number" &&
-                <Input css={styles.numberInput}>
+                <Input css={styles.number}>
                     <Input.Field
                         id={input.name}
                         type={input.type.type}
-                        css={styles.numberInputField}
                         {...register(name, { required: true })} />
                 </Input>
             }
@@ -39,26 +38,24 @@ export function FunctionParameterPrimitive({
                         {...register(name, { required: true })} />
                 </Input>
             }
-        </Flex>
+        </Stack>
     );
 }
 
 const styles = {
-    primitiveParameterFlex: cssObj({
-        width: "100%",
-        align: "left",
-    }),
-    primitiveParameterBox: cssObj({
+    flex: cssObj({
         alignSelf: "center",
     }),
-    numberInput: cssObj({
-        width: "100%",
+    box: cssObj({
+        alignSelf: "center",
     }),
-    numberInputField: cssObj({
-        alignContent: "center",
-        justifyContent: "center",
+    number: cssObj({
+        width: "min-content",
+        alignSelf: "center",
     }),
     checkbox: cssObj({
         height: "min-content",
+        width: "min-content",
+        alignSelf: "center",
     }),
 }

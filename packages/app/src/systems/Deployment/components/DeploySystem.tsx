@@ -1,6 +1,7 @@
 import { Copyable, Text } from "@fuel-ui/react";
 import { DeployButton, DeployingButton, UseDeployedContractButton, UseDeployedContractForm } from ".";
 import { DeployState } from "../utils";
+import { cssObj } from "@fuel-ui/css";
 
 interface DeploySystemProps {
     abi: string,
@@ -44,10 +45,18 @@ export function DeploySystem({
                         <DeployingButton />
                         :
                         <>
-                            <Text>Contract with address </Text>
-                            <Copyable value={contractId}>{contractId}</Copyable>
+                            <Copyable value={contractId} css={styles.contractAddress}>{contractId}</Copyable>
                         </>
             }
         </>
     );
 };
+
+const styles = {
+    contractAddress: cssObj({
+        overflowWrap: "anywhere",
+        paddingLeft: "$5",
+        paddingRight: "$5",
+        color: "$gray7"
+    })
+}

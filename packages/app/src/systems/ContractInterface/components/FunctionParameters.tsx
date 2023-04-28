@@ -1,5 +1,5 @@
 import { cssObj } from "@fuel-ui/css";
-import { Box, Flex, Stack } from "@fuel-ui/react";
+import { Box, Stack } from "@fuel-ui/react";
 import { FieldValues, UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { FunctionParameterNested } from ".";
 
@@ -18,7 +18,9 @@ export function FunctionParameters({
 }: FunctionParametersProps) {
     function functionParameterElements() {
         return inputInstances.map((input: any, index: number) => (
-            <Flex key={input.name + index} justify="left">
+            <Stack
+                key={input.name + index}
+            >
                 <FunctionParameterNested
                     name={`${functionName}.${input.name}`}
                     input={input}
@@ -26,7 +28,7 @@ export function FunctionParameters({
                     register={register}
                     setValue={setValue}
                 />
-            </Flex>
+            </Stack>
         ));
     }
 
@@ -35,12 +37,12 @@ export function FunctionParameters({
             <Stack>
                 {functionParameterElements()}
             </Stack>
-        </Box>);
+        </Box>
+    );
 }
 
 const styles = {
     parameters: cssObj({
-        width: "100%",
         alignSelf: "center",
     })
 }

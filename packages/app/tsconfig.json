@@ -12,13 +12,15 @@
         "noFallthroughCasesInSwitch": true,
         "noImplicitAny": true,
         "resolveJsonModule": true,
+        "paths": {
+            "@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"]
+        },
         "skipLibCheck": true,
         "sourceMap": true,
         "strict": true,
         "strictFunctionTypes": true,
         "strictNullChecks": true,
         "strictPropertyInitialization": true,
-        "suppressImplicitAnyIndexErrors": true,
         "target": "ES6",
         "types": ["@fuel-wallet/sdk"]
     },

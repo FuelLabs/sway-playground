@@ -9,10 +9,15 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@emotion/react": "^11.10.6",
+        "@emotion/styled": "^11.10.6",
         "@fuel-ui/css": "^0.13.0",
         "@fuel-ui/react": "^0.13.0",
         "@fuel-wallet/sdk": "^0.6.0",
+        "@mui/material": "^5.12.2",
         "@tanstack/react-query": "^4.24.9",
+        "csstype": "^3.0.10",
+        "dexie": "^3.0.2",
         "fuels": "^0.38.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
