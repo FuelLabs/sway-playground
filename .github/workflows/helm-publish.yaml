@@ -3,7 +3,7 @@ name: Build and publish Helm Chart
 on:
   push:
     branches:
-      - main
+      - master
     paths:
       - 'helm/sway-playground/Chart.yaml'
 
@@ -16,7 +16,7 @@ jobs:
     runs-on: buildjet-4vcpu-ubuntu-2204
     if: |
       (github.event_name == 'release' && github.event.action == 'published') ||
-      github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
+      github.ref == 'refs/heads/master' || github.event_name == 'pull_request'
     permissions:
       contents: read
       packages: write
