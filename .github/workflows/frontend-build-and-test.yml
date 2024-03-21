@@ -30,7 +30,7 @@ jobs:
         run: |
           cd app && npm ci && npm run build
           cp -r build ../build
-      - run: echo steps.meta.outputs
+      - run: echo ${{ steps.meta.outputs }}
       - uses: addnab/docker-run-action@v3
         with:
           image: ${{ steps.meta.outputs.tags }}
