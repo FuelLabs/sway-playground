@@ -14,7 +14,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
       - name: npm ci and build
         env:
           CI: true
@@ -24,6 +23,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - uses: actions-rs/cargo@v1
+        with:
+          command: run
       - name: npm test
         run: |
           cargo run
