@@ -20,10 +20,11 @@ jobs:
         run: |
           cd app && npm ci && npm run build
           cp -r build ../build
-      - uses: actions-rs/toolchain@v1
+      - uses: actions-rs/cargo@v1
         with:
-          toolchain: stable
-      - run: cargo run &
+          command: install
+          args: --path .
       - name: npm test
         run: |
+          sway-playground & # Start sway-playground in the background
           cd app && npm run test
