@@ -21,13 +21,10 @@ jobs:
           cd app && npm ci && npm run build
           cp -r build ../build
 
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/cargo@v1
+      - name: npm test
+        uses: actions-rs/cargo@v1
         with:
           command: run
-      - name: npm test
         run: |
           cargo run
           cd app && npm run test
-
