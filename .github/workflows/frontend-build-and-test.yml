@@ -13,6 +13,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: |
+            ghcr.io/fuellabs/sway-playground
+          tags: |
+            type=ref,event=branch
+            type=sha,prefix=
+            type=semver,pattern={{raw}}
       - uses: actions/checkout@v2
       - name: npm ci and build
         env:
@@ -20,11 +30,9 @@ jobs:
         run: |
           cd app && npm ci && npm run build
           cp -r build ../build
-      - uses: actions-rs/cargo@v1
+      - uses: addnab/docker-run-action@v3
         with:
-          command: install
-          args: --path .
+          image: ${{ steps.meta.outputs.tags }}
       - name: npm test
         run: |
-          sway-playground & # Start sway-playground in the background
           cd app && npm run test
