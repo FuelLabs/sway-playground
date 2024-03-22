@@ -89,6 +89,8 @@ jobs:
       - cargo-check
       - cargo-test
     runs-on: ubuntu-latest
+    outputs:
+      tags: ${{ steps.meta.outputs.tags }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -139,7 +141,7 @@ jobs:
           cd app && npm ci && npm run build
       - name: Run the service in docker
         run: |
-          docker run ${{ steps.meta.outputs.tags }} -p 8080:8080
+          docker run ${{ needs.build-and-publish-image.outputs.tags }} -p 8080:8080
       - name: NPM test
         run: |
           cd app && npm run test
