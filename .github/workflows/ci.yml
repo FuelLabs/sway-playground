@@ -141,7 +141,7 @@ jobs:
           cd app && npm ci && npm run build
       - name: Run the service in docker
         run: |
-          docker run -p 8080:8080 ${{ needs.build-and-publish-image.outputs.tags }}
+          docker run -d -p 8080:8080 ${{ needs.build-and-publish-image.outputs.tags }}
       - name: NPM test
         run: |
           cd app && npm run test
