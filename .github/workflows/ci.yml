@@ -130,11 +130,6 @@ jobs:
     needs:
       - build-and-publish-image
     runs-on: ubuntu-latest
-    services:
-      sway-playground:
-        image: ${{ steps.meta.outputs.tags }}
-        ports:
-          - 8080:8080
     steps:
       - uses: actions/checkout@v2
       - name: NPM build
@@ -142,6 +137,10 @@ jobs:
           CI: true
         run: |
           cd app && npm ci && npm run build
+      - uses: addnab/docker-run-action@v3
+        with:
+          image: ${{ steps.meta.outputs.tags }}
+          options: -p 8080:8080
       - name: NPM test
         run: |
           cd app && npm run test
