@@ -11,18 +11,12 @@ env:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-
+    services:
+      fuel-core:
+        image: ghcr.io/fuellabs/sway-playground
+        ports:
+          - 8080:8080
     steps:
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: |
-            ghcr.io/fuellabs/sway-playground
-          tags: |
-            type=ref,event=branch
-            type=sha,prefix=
-            type=semver,pattern={{raw}}
       - uses: actions/checkout@v2
       - name: npm ci and build
         env:
@@ -30,10 +24,6 @@ jobs:
         run: |
           cd app && npm ci && npm run build
           cp -r build ../build
-      - run: echo ${{ toJson(steps.meta.outputs) }}
-      - uses: addnab/docker-run-action@v3
-        with:
-          image: ${{ steps.meta.outputs.tags }}
       - name: npm test
         run: |
           cd app && npm run test
