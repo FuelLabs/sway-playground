@@ -3,11 +3,6 @@ import { LOCAL_SERVER_URI } from '../../../constants';
 import { ExampleMenuItem } from '../components/ExampleDropdown';
 
 describe(`test examples`, () => {
-  beforeAll(() => {
-    // Start server
-    // require('../../../server');
-  });
-
   describe(`transpile solidity examples`, () => {
     const uri = `${LOCAL_SERVER_URI}/transpile`;
 
@@ -53,6 +48,10 @@ describe(`test examples`, () => {
       });
 
       const response = await fetch(request);
+
+      // TODO: remove
+      expect(response.body).toBe({});
+
       const { error, abi, bytecode, storageSlots, forcVersion } = await response.json();
 
       expect(error).toBeUndefined();
