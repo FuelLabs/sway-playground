@@ -137,10 +137,9 @@ jobs:
           CI: true
         run: |
           cd app && npm ci && npm run build
-      - uses: addnab/docker-run-action@v3
-        with:
-          image: ${{ steps.meta.outputs.tags }}
-          options: -p 8080:8080
+      - name: Run the service in docker
+        run: |
+          docker run ${{ steps.meta.outputs.tags }} -p 8080:8080
       - name: NPM test
         run: |
           cd app && npm run test
