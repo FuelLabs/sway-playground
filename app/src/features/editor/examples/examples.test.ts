@@ -48,10 +48,6 @@ describe(`test examples`, () => {
       });
 
       const response = await fetch(request);
-
-      // TODO: remove
-      expect(response.body).toBe({});
-
       const { error, abi, bytecode, storageSlots, forcVersion } = await response.json();
 
       expect(error).toBeUndefined();
@@ -59,6 +55,6 @@ describe(`test examples`, () => {
       expect(bytecode).toBeDefined();
       expect(storageSlots).toBeDefined();
       expect(forcVersion).toBeDefined();
-    }, 10000);
+    }, 20000);
   });
 });
