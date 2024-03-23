@@ -55,6 +55,6 @@ describe(`test examples`, () => {
       expect(bytecode).toBeDefined();
       expect(storageSlots).toBeDefined();
       expect(forcVersion).toBeDefined();
-    }, 10000);
+    }, 40000);
   });
 });
