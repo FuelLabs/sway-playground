@@ -43,7 +43,7 @@ describe(`test examples`, () => {
         method: 'POST',
         body: JSON.stringify({
           contract: code,
-          toolchain: 'latest'
+          toolchain: 'beta-5'
         }),
       });
 
@@ -55,6 +55,6 @@ describe(`test examples`, () => {
       expect(bytecode).toBeDefined();
       expect(storageSlots).toBeDefined();
       expect(forcVersion).toBeDefined();
-    }, 20000);
+    }, 10000);
   });
 });
