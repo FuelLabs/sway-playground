@@ -5,7 +5,7 @@ import FormControl from '@mui/material/FormControl/FormControl';
 import Select from '@mui/material/Select/Select';
 import InputLabel from '@mui/material/InputLabel/InputLabel';
 import { ThemeContext } from '../../../theme/themeContext';
-import { darkColors, lightColors } from '@fuel-ui/css';
+import { DarkThemeStyling } from '../../../components/shared';
 
 export interface ExampleMenuItem {
   label: string;
@@ -43,37 +43,10 @@ function ExampleDropdown({
   // Import theme state
   const theme = useContext(ThemeContext)?.theme;
 
+  const dropdownStyling = theme !== 'light' ? DarkThemeStyling.darkDropdown : {};
   return (
     <FormControl
-      style={{ ...style }}
-      sx={{
-        '& fieldset': {
-          border: theme === 'light' ? '1px solid lightgrey' : 'none',
-        },
-        '.MuiInputBase-root': {
-          bgcolor: theme === 'light' ? 'inherit' : darkColors.gray1,
-          color: theme === 'light' ? 'inherit' : lightColors.scalesGreen7,
-          borderBottom:
-            theme === 'light'
-              ? 'inherit'
-              : `1px solid ${lightColors.scalesGreen7}`,
-          borderRight:
-            theme === 'light'
-              ? 'inherit'
-              : `1px solid ${lightColors.scalesGreen7}`,
-          '&:hover': {
-            background: theme === 'light' ? 'inherit' : 'black',
-          },
-        },
-        //color of dropdown label
-        '.MuiFormLabel-root': {
-          color: theme === 'light' ? 'inherit' : '#E0FFFF',
-        },
-        //color of dropdown svg icon
-        '.MuiSvgIcon-root': {
-          color: theme === 'light' ? 'inherit' : lightColors.scalesGreen7,
-        },
-      }}
+      sx={ {...style , ...dropdownStyling}}
       size='small'>
       <InputLabel id='example-select-label'>Example</InputLabel>
       <Tooltip placement='top' title={'Load an example contract'}>

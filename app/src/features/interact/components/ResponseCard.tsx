@@ -32,7 +32,7 @@ export function ResponseCard({
   }, [outputType, response]);
 
   // Import theme state
-  const theme = useContext(ThemeContext);
+  const theme = useContext(ThemeContext)?.theme;
 
   return (
     <Card
@@ -43,10 +43,10 @@ export function ResponseCard({
       }}>
       <CardContent
         style={{
-          color: theme?.theme === 'light' ? darkColors.gray6 : '#E0FFFF',
+          color: theme === 'light' ? darkColors.gray6 : '#E0FFFF',
           fontSize: '14px',
           fontFamily: 'monospace',
-          background: theme?.theme === 'light' ? 'lightgrey': '#1F1F1F',
+          background: theme === 'light' ? 'lightgrey': '#1F1F1F',
           padding: '2px 18px 2px',
           minHeight: '44px',
         }}>

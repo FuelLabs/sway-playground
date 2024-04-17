@@ -34,8 +34,8 @@ export function FunctionCallAccordion({
   const theme = useContext(ThemeContext)?.theme;
 
   return (
-    <Accordion key={contractId + functionName} style={{ background: theme === 'light' ? '' : '#181818', border: theme === 'light' ? '' : `1px solid ${darkColors.gray6}`}}>
-      <AccordionSummary expandIcon={<ExpandMoreIcon style={{color: theme === 'light' ? '' : lightColors.scalesGreen7}}/>}>
+    <Accordion key={contractId + functionName} sx={[theme !== 'light' && {background: '#181818', border: `1px solid ${darkColors.gray6}`}]}>
+      <AccordionSummary expandIcon={<ExpandMoreIcon sx={[theme !== 'light' && {color: lightColors.scalesGreen7}]}/>}>
         <FormLabel style={{ fontFamily: 'monospace', color: theme === 'light' ? '#00000099' : lightColors.scalesGreen3}}>
           {functionName}
         </FormLabel>

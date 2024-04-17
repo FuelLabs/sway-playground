@@ -4,8 +4,8 @@ import TextField from '@mui/material/TextField';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ComplexParameterInput from './ComplexParameterInput';
-import { lightColors } from '@fuel-ui/css';
 import { ThemeContext } from "../../../theme/themeContext";
+import { DarkThemeStyling } from "../../../components/shared";
 
 export interface ParameterInputProps {
   input: InputInstance;
@@ -16,6 +16,9 @@ export interface ParameterInputProps {
 function ParameterInput({ input, value, onChange }: ParameterInputProps) {
   // Import theme state
   const theme = useContext(ThemeContext)?.theme;
+
+  const inputStyling = theme !== 'light' ? DarkThemeStyling.darkInput : {};
+
   switch (input.type.literal) {
     case 'string':
       return (
@@ -24,19 +27,7 @@ function ParameterInput({ input, value, onChange }: ParameterInputProps) {
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             onChange(event.target.value);
           }}
-          sx={{
-            '& fieldset': {
-              border: theme === 'light' ? '1px solid lightgrey' : 'none',
-            },
-            '.MuiInputBase-root': {
-              border:
-                theme === 'light'
-                  ? 'inherit'
-                  : `1px solid ${lightColors.scalesGreen7}`,
-              bgcolor: theme === 'light' ? 'inherit' : 'transparent',
-              color: theme === 'light' ? 'inherit' : '#E0FFFF',
-            },
-          }}
+          sx={{...inputStyling}}
         />
       );
     case 'number':
@@ -47,19 +38,7 @@ function ParameterInput({ input, value, onChange }: ParameterInputProps) {
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             onChange(Number.parseFloat(event.target.value));
           }}
-          sx={{
-            '& fieldset': {
-              border: theme === 'light' ? '1px solid lightgrey' : 'none',
-            },
-            '.MuiInputBase-root': {
-              border:
-                theme === 'light'
-                  ? 'inherit'
-                  : `1px solid ${lightColors.scalesGreen7}`,
-              bgcolor: theme === 'light' ? 'inherit' : 'transparent',
-              color: theme === 'light' ? 'inherit' : '#E0FFFF',
-            },
-          }}
+          sx={{...inputStyling}}
         />
       );
     case 'bool':
