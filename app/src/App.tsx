@@ -77,7 +77,7 @@ function App() {
     return () => {
       window.removeEventListener('message', setLocalStorageFromExternalDomain);
     };
-  }, []);
+  });
 
   useEffect(() => {
     if (showSolidity) {
