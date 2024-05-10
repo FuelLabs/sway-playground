@@ -1,7 +1,11 @@
 import * as React from 'react';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import Table from '@mui/material/Table';
+import Table, { TableProps } from '@mui/material/Table';
+import { styled } from '@mui/material/styles';
+import { ThemeContext } from '../../../theme/themeContext';
+import { useContext } from 'react';
+import { lightColors } from '@fuel-ui/css';
 import Paper from '@mui/material/Paper';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
@@ -47,6 +51,10 @@ export function FunctionParameters({
   paramValues,
   setParamValues,
 }: FunctionParametersProps) {
+
+  // Import theme state
+  const theme = useContext(ThemeContext);
+
   const setParamAtIndex = React.useCallback(
     (index: number, value: SimpleParamValue) => {
       const newParamValues = [...paramValues];
@@ -60,14 +68,19 @@ export function FunctionParameters({
     return <React.Fragment />;
   }
 
+  // Created custom Table
+  const TableCellComponent = styled(TableCell)<TableProps>(() => ({
+    color: theme?.theme === 'light' ? '' : lightColors.scalesGreen3,
+  }));
+
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} style={{ background: theme?.theme === 'light' ? '' : '#1F1F1F' }}>
       <Table aria-label='function parameter table'>
         <TableHead>
           <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Type</TableCell>
-            <TableCell>Value</TableCell>
+            <TableCellComponent>Name</TableCellComponent>
+            <TableCellComponent>Type</TableCellComponent>
+            <TableCellComponent>Value</TableCellComponent>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -75,11 +88,11 @@ export function FunctionParameters({
             <TableRow
               key={functionName + input.name + index}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-              <TableCell component='th' scope='row'>
+              <TableCellComponent component='th' scope='row'>
                 {input.name}
-              </TableCell>
-              <TableCell>{input.type.swayType}</TableCell>
-              <TableCell style={{ width: '100%' }}>
+              </TableCellComponent>
+              <TableCellComponent>{input.type.swayType}</TableCellComponent>
+              <TableCell style={{ width: '100%'}}>
                 <ParameterInput
                   input={input}
                   value={paramValues[index]}
