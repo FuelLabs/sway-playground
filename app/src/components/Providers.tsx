@@ -12,7 +12,10 @@ type ProvidersProps = {
 };
 
 export function Providers({ children }: ProvidersProps) {
-  const { muiTheme } = useTheme();
+  const { muiTheme, theme } = useTheme();
+
+  console.log(`asd muiTheme`, muiTheme);
+
 
   return (
     <ThemeProvider theme={muiTheme}>
@@ -21,6 +24,7 @@ export function Providers({ children }: ProvidersProps) {
           fuelConfig={{
             connectors: defaultConnectors({ devMode: true }),
           }}
+          theme={theme}
         >
           {globalCss()()}
           {children}
