@@ -73,7 +73,7 @@ impl MultiAsset for Contract {
     fn set_decimals(asset: AssetId, decimals: u8) {
         require_access_owner();
         storage.decimals.insert(asset, decimals);
-        SetDecimalsEvent::new(asset, decimals, sender).log();
+        SetDecimalsEvent::new(asset, decimals, msg_sender().unwrap()).log();
     }
 }
 

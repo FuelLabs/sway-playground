@@ -117,7 +117,7 @@ impl SRC3 for Contract {
             .total_supply
             .write(current_supply + amount);
         mint_to(recipient, DEFAULT_SUB_ID, amount);
-        TotalSupplyEvent::new(asset_id, current_supply + amount, msg_sender().unwrap()).log();
+        TotalSupplyEvent::new(AssetId::default(), current_supply + amount, msg_sender().unwrap()).log();
     }
 
     #[payable]
@@ -136,7 +136,7 @@ impl SRC3 for Contract {
             .total_supply
             .write(current_supply - amount);
         burn(DEFAULT_SUB_ID, amount);
-        TotalSupplyEvent::new(asset_id, current_supply - amount, msg_sender().unwrap()).log();
+        TotalSupplyEvent::new(AssetId::default(), current_supply - amount, msg_sender().unwrap()).log();
     }
 }
 
@@ -155,7 +155,6 @@ impl EmitSRC20Events for Contract {
         SetNameEvent::new(asset, name, sender).log();
         SetSymbolEvent::new(asset, symbol, sender).log();
         SetDecimalsEvent::new(asset, DECIMALS, sender).log();
-        TotalSupplyEvent::new(asset, TOTAL_SUPPLY, sender).log();
     }
 }
 `;
