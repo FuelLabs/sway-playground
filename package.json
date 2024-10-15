@@ -5,8 +5,8 @@
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=20.11.0",
-    "pnpm": ">=8.1.0"
+    "node": ">=20.15.1",
+    "pnpm": ">=9.5.0"
   },
   "repository": {
     "type": "git",

@@ -131,6 +131,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: FuelLabs/github-actions/setups/node@master
+        with:
+          node-version: 20.15.1
+          pnpm-version: 9.5.0
       - name: Run eslint
         run: |
           cd app && pnpm install
@@ -141,6 +145,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: FuelLabs/github-actions/setups/node@master
+        with:
+          node-version: 20.15.1
+          pnpm-version: 9.5.0
       - name: Run prettier
         run: |
           cd app && pnpm install
@@ -162,6 +170,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - uses: FuelLabs/github-actions/setups/node@master
+        with:
+          node-version: 20.15.1
+          pnpm-version: 9.5.0
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
