@@ -7,7 +7,7 @@
     "@emotion/styled": "^11.11.0",
     "@fuel-ui/css": "^0.23",
     "@fuel-ui/react": "^0.23.3",
-    "@fuels/connectors": "0.5.0",
+    "@fuels/connectors": "0.25.0",
     "@fuels/react": "0.25.0",
     "@mui/base": "^5.0.0-beta.2",
     "@mui/icons-material": "^5.11.16",
@@ -15,6 +15,8 @@
     "@mui/material": "^5.13.2",
     "@tanstack/react-query": "5.35.1",
     "@vercel/analytics": "^1.2.2",
+    "@wagmi/connectors": "5.0.26",
+    "@wagmi/core": "2.12.2",
     "ace-builds": "^1.22.0",
     "ace-mode-solidity": "^0.1.1",
     "ansicolor": "^1.1.100",
@@ -25,11 +27,11 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.23.0",
     "react-scripts": "^5.0.1",
-    "typescript": "^5.4.5",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@fuels/ts-config": "0.20.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -38,11 +40,14 @@
     "@types/node": "^16.18.32",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
+    "@vitejs/plugin-react": "4.2.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
     "prettier": "^3.3.1",
     "source-map-explorer": "^2.5.3",
-    "source-map-loader": "^4.0.1"
+    "source-map-loader": "^4.0.1",
+    "typescript": "^5.4.5",
+    "vite": "5.2.11"
   },
   "overrides": {
     "react-scripts": {
@@ -51,14 +56,14 @@
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "start": "DISABLE_ESLINT_PLUGIN=true react-scripts start",
-    "build": "react-scripts build",
+    "start": "vite",
+    "build": "vite build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint --fix 'src/**/*.{ts,tsx}'",
     "lint-check": "eslint 'src/**/*.{ts,tsx}'",
     "format": "prettier --write 'src/**/*.{ts,tsx}'",
-    "format-check": "prettier --check 'src/**/*.{ts,tsx}' --max-warnings=0"
+    "format-check": "prettier --check 'src/**/*.{ts,tsx}'"
   },
   "eslintConfig": {
     "plugins": [

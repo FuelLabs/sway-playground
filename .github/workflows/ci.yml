@@ -131,20 +131,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: FuelLabs/github-actions/setups/node@master
+        with:
+          node-version: 20.15.1
+          pnpm-version: 9.5.0
       - name: Run eslint
         run: |
-          cd app && npm install
-          npm run lint-check
+          cd app && pnpm install
+          pnpm lint-check
 
   prettier-check:
     needs: cancel-previous-runs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: FuelLabs/github-actions/setups/node@master
+        with:
+          node-version: 20.15.1
+          pnpm-version: 9.5.0
       - name: Run prettier
         run: |
-          cd app && npm install
-          npm run format-check
+          cd app && pnpm install
+          pnpm format-check
 
   frontend-build-and-test:
     if: github.ref != 'refs/heads/master'
@@ -162,6 +170,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - uses: FuelLabs/github-actions/setups/node@master
+        with:
+          node-version: 20.15.1
+          pnpm-version: 9.5.0
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -192,9 +204,9 @@ jobs:
           CI: true
         run: |
           cd app
-          npm ci
-          npm run build
-          npm run test
+          pnpm ci
+          pnpm build
+          pnpm test
 
   deploy:
     if: github.ref == 'refs/heads/master'

@@ -3,7 +3,7 @@ import AceEditor from "react-ace";
 import "ace-builds/webpack-resolver";
 import "ace-builds/src-noconflict/mode-rust";
 import "ace-builds/src-noconflict/theme-chrome";
-import "ace-builds/src-noconflict/theme-tomorrow_night_bright";
+import "ace-builds/src-noconflict/theme-tomorrow_night";
 import { StyledBorder } from "../../../components/shared";
 import "ace-mode-solidity/build/remix-ide/mode-solidity";
 import ActionOverlay from "./ActionOverlay";

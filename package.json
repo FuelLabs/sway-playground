@@ -1,0 +1,27 @@
+{
+  "name": "sway-playground-project",
+  "version": "0.0.0",
+  "private": true,
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=20.15.1",
+    "pnpm": ">=9.5.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FuelLabs/sway-playground.git"
+  },
+  "bugs": {
+    "url": "https://github.com/FuelLabs/sway-playground/issues"
+  },
+  "workspaces": [
+    "./app"
+  ],
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowAny": ["react", "react-dom"],
+      "ignoreMissing": ["react", "react-dom"]
+    }
+  }
+}
