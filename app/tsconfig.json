@@ -1,12 +1,14 @@
 {
   "extends": "@fuels/ts-config/base.json",
   "compilerOptions": {
+    "jsx": "react",
     "allowJs": true,
     "outDir": "./dist",
     "baseUrl": ".",
     "rootDir": ".",
   },
   "include": [
-    "./src"
-, "vite-env.d.ts"  ]
+    "./src", 
+    "vite-env.d.ts"
+  ]
 }

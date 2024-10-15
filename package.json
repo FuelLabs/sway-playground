@@ -1,5 +1,5 @@
 {
-  "name": "sway-playgrounds-project",
+  "name": "sway-playground-project",
   "version": "0.0.0",
   "private": true,
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
@@ -10,10 +10,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FuelLabs/fuel-playground.git"
+    "url": "git+https://github.com/FuelLabs/sway-playground.git"
   },
   "bugs": {
-    "url": "https://github.com/FuelLabs/fuel-playground/issues"
+    "url": "https://github.com/FuelLabs/sway-playground/issues"
   },
   "workspaces": [
     "./app"

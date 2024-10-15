@@ -14,9 +14,6 @@ type ProvidersProps = {
 export function Providers({ children }: ProvidersProps) {
   const { muiTheme, theme } = useTheme();
 
-  console.log(`asd muiTheme`, muiTheme);
-
-
   return (
     <ThemeProvider theme={muiTheme}>
       <QueryClientProvider client={queryClient}>
