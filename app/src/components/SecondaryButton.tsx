@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import useTheme from "../context/theme";
@@ -11,7 +11,6 @@ export interface SecondaryButtonProps {
   tooltip?: string;
   style?: React.CSSProperties;
   header?: boolean;
-  live?: boolean;
 }
 function SecondaryButton({
   onClick,
@@ -21,7 +20,6 @@ function SecondaryButton({
   tooltip,
   style,
   header,
-  live = false,
 }: SecondaryButtonProps) {
   if (header) {
     style = {
@@ -34,12 +32,6 @@ function SecondaryButton({
   }
 
   const { themeColor } = useTheme();
-
-  useEffect(() => {
-    if (live) {
-      onClick();
-    }
-  }, [live, onClick]);
 
   return (
     <Tooltip title={tooltip}>
@@ -56,6 +48,12 @@ function SecondaryButton({
             ":disabled": {
               borderColor: themeColor("disabled1"),
               color: themeColor("disabled1"),
+            },
+            "@media (max-width: 1440px)": {
+              marginRight: "5px",
+              marginBottom: "5px",
+              height: "35px",
+              minWidth: "90px",
             },
           }}
           variant="outlined"
