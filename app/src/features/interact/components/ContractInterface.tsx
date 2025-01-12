@@ -71,7 +71,7 @@ export function ContractInterface({
         >
           Contract Interface
         </div>
-        <CopyableHex hex={contractId} tooltip="contract ID" />
+        <CopyableHex hex={contractId} slice={true} tooltip="contract ID" />
       </div>
 
       {functionInterfaces}
