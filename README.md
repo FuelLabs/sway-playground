@@ -31,7 +31,7 @@ Sway Playground is built in Rust and Javascript. To begin, install the Rust tool
 rustup default stable
 ```
 
-If you haven't already, add the Cargo bin directory to your `PATH` by adding the following line to `~/.profile` and restarting the shell session.
+If not already done, add the Cargo bin directory to your `PATH` by adding the following line to `~/.profile` and restarting the shell session.
 
 ```sh
 export PATH="${HOME}/.cargo/bin:${PATH}"
