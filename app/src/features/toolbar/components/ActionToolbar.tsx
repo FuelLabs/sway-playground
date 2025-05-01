@@ -100,6 +100,7 @@ function ActionToolbar({
             ? "Hide the Solidity editor"
             : "Show the Solidity editor to transpile Solidity to Sway"
         }
+        live={true}
       />
       <SecondaryButton
         header={true}
