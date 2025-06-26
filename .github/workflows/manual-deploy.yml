@@ -1,0 +1,71 @@
+name: Manual Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      force_rebuild:
+        description: 'Use the latest toolchain version sets from fuelup'
+        required: true
+        type: boolean
+        default: false
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  build-and-publish-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ghcr.io/fuellabs/sway-playground
+          tags: |
+            type=sha,prefix=
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to the ghcr.io registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push the image to ghcr.io
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: deployment/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          no-cache: ${{ github.event.inputs.force_rebuild }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    needs: build-and-publish-image
+    runs-on: buildjet-4vcpu-ubuntu-2204
+    env:
+      CONFIG: 'fuel-prod-1'
+    steps:
+      - name: Set Environment Variables
+        run: |
+          tag=$(echo $GITHUB_SHA | cut -c1-7)
+          echo "IMAGE_TAG=$tag" >> $GITHUB_ENV
+
+      - name: Deploy Sway Playground Backend Environment
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: Deploy Sway Playground on k8s
+          repo: FuelLabs/fuel-deployment
+          ref: refs/heads/master
+          token: ${{ secrets.REPO_TOKEN }}
+          inputs: '{ "cluster": "${{ env.CONFIG }}", "deployment-version": "${{ github.sha }}", "image-version": "${{ env.IMAGE_TAG }}" }'
