@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM lukemathwalker/cargo-chef:latest-rust-1.81 as chef
+FROM lukemathwalker/cargo-chef:latest-rust-1.87 as chef
 WORKDIR /build/
 # hadolint ignore=DL3008
 
@@ -20,7 +20,7 @@ RUN cargo chef prepare --recipe-path recipe.json
 FROM chef as builder
 
 # Install charcoal
-RUN cargo install --git https://github.com/ourovoros-io/charcoal.git --rev e69a6ffaf3e7eaf9f3ceea543087ea59ec5fd5d1
+RUN cargo install --git https://github.com/ourovoros-io/charcoal.git
 
 ENV CARGO_NET_GIT_FETCH_WITH_CLI=true
 COPY --from=planner /build/recipe.json recipe.json
