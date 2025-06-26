@@ -2,12 +2,6 @@ name: Manual Deploy
 
 on:
   workflow_dispatch:
-    inputs:
-      force_rebuild:
-        description: 'Use the latest toolchain version sets from fuelup'
-        required: true
-        type: boolean
-        default: false
 
 env:
   REGISTRY: ghcr.io
@@ -46,7 +40,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          no-cache: ${{ github.event.inputs.force_rebuild }}
+          no-cache: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
