@@ -8,8 +8,9 @@ import {
 } from "../../../utils/localStorage";
 import { CopyableHex } from "../../../components/shared";
 import { Toolchain } from "../components/ToolchainDropdown";
-import { SERVER_URI } from "../../../constants";
+import { SERVER_URI, AI_FEATURES_ENABLED } from "../../../constants";
 import { track } from "@vercel/analytics/react";
+import { FixWithAIButton } from "../../ai/components/FixWithAIButton";
 
 function toResults(
   prefixedBytecode: string,
@@ -36,6 +37,7 @@ export function useCompile(
   setIsCompiled: (isCompiled: boolean) => void,
   setResults: (entry: React.ReactElement[]) => void,
   toolchain: Toolchain,
+  onCodeFixed?: (fixedCode: string) => void,
 ) {
   const [serverError, setServerError] = useState<boolean>(false);
   const [version, setVersion] = useState<string | undefined>();
@@ -74,7 +76,6 @@ export function useCompile(
       .then((response) => {
         const { error, forcVersion } = response;
         if (error) {
-          // Preserve the ANSI color codes from the compiler output.
           const parsedAnsi = ansicolor.parse(error);
           const results = parsedAnsi.spans.map((span, i) => {
             const { text, css } = span;
@@ -83,7 +84,20 @@ export function useCompile(
             `;
             return <Span key={`${i}-${text}`}>{text}</Span>;
           });
-          setResults(results);
+          const finalResults = [...results];
+          if (AI_FEATURES_ENABLED && onCodeFixed && code) {
+            finalResults.push(
+              <div key="fix-with-ai" style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid #333' }}>
+                <FixWithAIButton
+                  errorMessage={error}
+                  sourceCode={code}
+                  onCodeFixed={onCodeFixed}
+                />
+              </div>
+            );
+          }
+          
+          setResults(finalResults);
           setVersion(forcVersion);
           saveAbi("");
           saveBytecode("");

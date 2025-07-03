@@ -22,61 +22,37 @@ import { useGist } from "./features/editor/hooks/useGist";
 import { useSearchParams } from "react-router-dom";
 import Copyable from "./components/Copyable";
 import useTheme from "./context/theme";
+import { AIGenerationDialog } from "./features/ai/components/AIGenerationDialog";
+import { AI_FEATURES_ENABLED } from "./constants";
 
 const DRAWER_WIDTH = "40vw";
 
 function App() {
-  // The current sway code in the editor.
   const [swayCode, setSwayCode] = useState<string>(loadSwayCode());
-
-  // The current solidity code in the editor.
   const [solidityCode, setSolidityCode] = useState<string>(loadSolidityCode());
-
-  // An error message to display to the user.
   const [showSolidity, setShowSolidity] = useState(false);
-
-  // The most recent code that the user has requested to compile.
   const [codeToCompile, setCodeToCompile] = useState<string | undefined>(
     undefined,
   );
-
-  // The most recent code that the user has requested to transpile.
   const [codeToTranspile, setCodeToTranspile] = useState<string | undefined>(
     undefined,
   );
-
-  // Whether or not the current code in the editor has been compiled.
   const [isCompiled, setIsCompiled] = useState(false);
-
-  // The toolchain to use for compilation.
   const [toolchain, setToolchain] = useState<Toolchain>("testnet");
-
-  // The deployment state
   const [deployState, setDeployState] = useState(DeployState.NOT_DEPLOYED);
-
-  // Functions for reading and writing to the log output.
   const [log, updateLog] = useLog();
-
-  // The contract ID of the deployed contract.
   const [contractId, setContractId] = useState("");
-
-  // An error message to display to the user.
   const [drawerOpen, setDrawerOpen] = useState(false);
-
-  // The query parameters for the current URL.
   const [searchParams] = useSearchParams();
-
-  // The theme color for the app.
   const { themeColor } = useTheme();
+  const [aiDialogOpen, setAiDialogOpen] = useState(false);
 
-  // If showSolidity is toggled on, reset the compiled state.
   useEffect(() => {
     if (showSolidity) {
       setIsCompiled(false);
     }
   }, [showSolidity]);
 
-  // Load the query parameters from the URL and set the state accordingly. Gists are loaded in useGist.
   useEffect(() => {
     if (searchParams.get("transpile") === "true") {
       setShowSolidity(true);
@@ -106,7 +82,6 @@ function App() {
     [setSolidityCode],
   );
 
-  // Loading shared code by query parameter and get a function for creating sharable permalinks.
   const { newGist } = useGist(onSwayCodeChange, onSolidityCodeChange);
 
   const setError = useCallback(
@@ -144,7 +119,6 @@ function App() {
   const onCompileClick = useCallback(() => {
     track("Compile Click", { toolchain });
     if (showSolidity) {
-      // Transpile the Solidity code before compiling.
       track("Transpile");
       setCodeToTranspile(solidityCode);
     } else {
@@ -159,6 +133,22 @@ function App() {
     toolchain,
   ]);
 
+  const onAIAssistClick = useCallback(() => {
+    track("AI Assist Click");
+    setAiDialogOpen(true);
+  }, []);
+
+  const onAICodeGenerated = useCallback((code: string) => {
+    track("AI Code Generated");
+    onSwayCodeChange(code);
+    setAiDialogOpen(false);
+  }, [onSwayCodeChange]);
+
+  const onAICodeFixed = useCallback((fixedCode: string) => {
+    track("AI Code Fixed");
+    onSwayCodeChange(fixedCode);
+  }, [onSwayCodeChange]);
+
   useTranspile(
     codeToTranspile,
     setCodeToCompile,
@@ -166,7 +156,7 @@ function App() {
     setError,
     updateLog,
   );
-  useCompile(codeToCompile, setError, setIsCompiled, updateLog, toolchain);
+  useCompile(codeToCompile, setError, setIsCompiled, updateLog, toolchain, onAICodeFixed);
 
   return (
     <div
@@ -188,6 +178,7 @@ function App() {
         showSolidity={showSolidity}
         setShowSolidity={setShowSolidity}
         updateLog={updateLog}
+        onAIAssistClick={AI_FEATURES_ENABLED ? onAIAssistClick : undefined}
       />
       <div
         style={{
@@ -215,6 +206,13 @@ function App() {
         contractId={contractId}
         updateLog={updateLog}
       />
+      {AI_FEATURES_ENABLED && (
+        <AIGenerationDialog
+          open={aiDialogOpen}
+          onClose={() => setAiDialogOpen(false)}
+          onCodeGenerated={onAICodeGenerated}
+        />
+      )}
       <Analytics />
     </div>
   );
