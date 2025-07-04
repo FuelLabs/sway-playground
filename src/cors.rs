@@ -2,7 +2,7 @@ use rocket::fairing::{Fairing, Info, Kind};
 use rocket::http::Header;
 use rocket::{Request, Response};
 
-// Build an open cors module so this server can be used accross many locations on the web.
+// Build an open cors module so this server can be used across many locations on the web.
 pub struct Cors;
 
 // Build Cors Fairing.
