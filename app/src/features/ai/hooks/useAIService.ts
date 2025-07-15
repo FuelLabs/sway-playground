@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { AI_FEATURES_ENABLED } from '../../../constants';
+import { aiService } from '../../../services/aiService';
 
 export interface AIServiceState<TResult> {
   isLoading: boolean;
@@ -29,7 +29,7 @@ export function useAIService<TRequest, TResult>(
     error: null
   });
 
-  const isAvailable = AI_FEATURES_ENABLED;
+  const isAvailable = aiService.isAvailable();
 
   const execute = useCallback(async (request: TRequest) => {
     if (!isAvailable) {

@@ -23,7 +23,7 @@ import { useSearchParams } from "react-router-dom";
 import Copyable from "./components/Copyable";
 import useTheme from "./context/theme";
 import { AIGenerationDialog } from "./features/ai/components/AIGenerationDialog";
-import { AI_FEATURES_ENABLED } from "./constants";
+import { aiService } from "./services/aiService";
 
 const DRAWER_WIDTH = "40vw";
 
@@ -69,6 +69,7 @@ function App() {
       saveSwayCode(code);
       setSwayCode(code);
       setIsCompiled(false);
+      setCodeToCompile(undefined); // Clear previous compilation state
     },
     [setSwayCode],
   );
@@ -178,7 +179,7 @@ function App() {
         showSolidity={showSolidity}
         setShowSolidity={setShowSolidity}
         updateLog={updateLog}
-        onAIAssistClick={AI_FEATURES_ENABLED ? onAIAssistClick : undefined}
+        onAIAssistClick={aiService.isAvailable() ? onAIAssistClick : undefined}
       />
       <div
         style={{
@@ -206,7 +207,7 @@ function App() {
         contractId={contractId}
         updateLog={updateLog}
       />
-      {AI_FEATURES_ENABLED && (
+      {aiService.isAvailable() && (
         <AIGenerationDialog
           open={aiDialogOpen}
           onClose={() => setAiDialogOpen(false)}

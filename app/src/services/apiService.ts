@@ -1,4 +1,4 @@
-import { AI_BACKEND_URL } from '../constants';
+import { SERVER_URI } from '../constants';
 
 export interface ApiRequestOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
@@ -10,7 +10,7 @@ class ApiService {
   private baseURL: string;
 
   constructor() {
-    this.baseURL = AI_BACKEND_URL;
+    this.baseURL = SERVER_URI;
   }
 
   private async makeRequest(
@@ -28,7 +28,7 @@ class ApiService {
     const timeoutId = setTimeout(() => controller.abort(), timeout);
 
     try {
-      const response = await fetch(`${this.baseURL}/api${endpoint}`, {
+      const response = await fetch(`${this.baseURL}${endpoint}`, {
         method,
         headers: {
           'Content-Type': 'application/json',
@@ -62,59 +62,7 @@ class ApiService {
     return Boolean(this.baseURL);
   }
 
-  // AI Service methods
-  async generateSwayCode(request: any): Promise<any> {
-    if (!this.isAvailable()) {
-      throw new Error('AI service not available. Please check backend configuration.');
-    }
-
-    try {
-      return await this.makeRequest('/ai/generate', request);
-    } catch (error) {
-      throw new Error('Failed to generate Sway code. Please try again.');
-    }
-  }
-
-  async analyzeError(request: any): Promise<any> {
-    if (!this.isAvailable()) {
-      throw new Error('AI service not available. Please check backend configuration.');
-    }
-
-    try {
-      return await this.makeRequest('/ai/analyze-error', request);
-    } catch (error) {
-      throw new Error('Failed to analyze error. Please try again.');
-    }
-  }
-
-  // MCP Service methods
-  async searchDocs(request: any): Promise<any> {
-    try {
-      return await this.makeRequest('/docs/search', request);
-    } catch (error) {
-      console.error('MCP searchDocs error:', error);
-      return { results: [] };
-    }
-  }
-
-  async getRelevantDocs(swayQuery: string): Promise<string> {
-    try {
-      const result = await this.makeRequest('/docs/relevant', { query: swayQuery });
-      return result.context || '';
-    } catch (error) {
-      console.error('Error getting relevant docs:', error);
-      return '';
-    }
-  }
-
-  async isDocsAvailable(): Promise<boolean> {
-    try {
-      const result = await this.makeRequest('/docs/health');
-      return result.available;
-    } catch (error) {
-      return false;
-    }
-  }
+  // Add other non-AI/MCP API methods here as needed
 }
 
 export const apiService = new ApiService();

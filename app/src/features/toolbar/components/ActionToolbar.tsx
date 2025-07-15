@@ -16,7 +16,7 @@ import SwitchThemeButton from "./SwitchThemeButton";
 import { useConnectIfNotAlready } from "../hooks/useConnectIfNotAlready";
 import { useDisconnect } from "@fuels/react";
 import { useNavigate } from "react-router-dom";
-import { AI_FEATURES_ENABLED } from "../../../constants";
+import { aiService } from "../../../services/aiService";
 
 export interface ActionToolbarProps {
   deployState: DeployState;
@@ -111,7 +111,7 @@ function ActionToolbar({
         text="ABI"
         tooltip="Query an already-deployed contract using the ABI"
       />
-      {AI_FEATURES_ENABLED && onAIAssistClick && !isMobile && (
+      {aiService.isAvailable() && onAIAssistClick && !isMobile && (
         <SecondaryButton
           header={true}
           onClick={onAIAssistClick}

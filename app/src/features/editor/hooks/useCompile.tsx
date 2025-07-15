@@ -8,9 +8,10 @@ import {
 } from "../../../utils/localStorage";
 import { CopyableHex } from "../../../components/shared";
 import { Toolchain } from "../components/ToolchainDropdown";
-import { SERVER_URI, AI_FEATURES_ENABLED } from "../../../constants";
+import { SERVER_URI } from "../../../constants";
 import { track } from "@vercel/analytics/react";
 import { FixWithAIButton } from "../../ai/components/FixWithAIButton";
+import { aiService } from "../../../services/aiService";
 
 function toResults(
   prefixedBytecode: string,
@@ -85,7 +86,7 @@ export function useCompile(
             return <Span key={`${i}-${text}`}>{text}</Span>;
           });
           const finalResults = [...results];
-          if (AI_FEATURES_ENABLED && onCodeFixed && code) {
+          if (aiService.isAvailable() && onCodeFixed && code) {
             finalResults.push(
               <div key="fix-with-ai" style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid #333' }}>
                 <FixWithAIButton
