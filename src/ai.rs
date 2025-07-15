@@ -402,10 +402,8 @@ impl AIService {
                         &response_text
                     };
 
-                    let mcp_response: MCPResponse =
-                        serde_json::from_str(json_data).map_err(|e| {
-                            ApiError::Ai(format!("Failed to parse MCP response: {e}"))
-                        })?;
+                    let mcp_response: MCPResponse = serde_json::from_str(json_data)
+                        .map_err(|e| ApiError::Ai(format!("Failed to parse MCP response: {e}")))?;
 
                     if let Some(error) = mcp_response.error {
                         Ok(json!({
