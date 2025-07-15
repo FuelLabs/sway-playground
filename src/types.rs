@@ -104,3 +104,37 @@ pub struct GistResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
 }
+
+/// The AI Sway code generation request.
+#[derive(Deserialize)]
+pub struct SwayCodeGenerationRequest {
+    pub prompt: String,
+}
+
+/// The response to an AI Sway code generation request.
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SwayCodeGenerationResponse {
+    pub code: String,
+    pub explanation: String,
+    pub suggestions: Vec<String>,
+}
+
+/// The AI error analysis request.
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ErrorAnalysisRequest {
+    pub error_message: String,
+    pub source_code: String,
+    pub line_number: Option<u32>,
+}
+
+/// The response to an AI error analysis request.
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ErrorAnalysisResponse {
+    pub analysis: String,
+    pub suggestions: Vec<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fixed_code: Option<String>,
+}

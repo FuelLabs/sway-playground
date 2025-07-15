@@ -21,6 +21,8 @@ pub enum ApiError {
     Charcoal(String),
     #[error("GitHub error: {0}")]
     Github(String),
+    #[error("AI service error: {0}")]
+    Ai(String),
 }
 
 impl<'r, 'o: 'r> Responder<'r, 'o> for ApiError {
@@ -29,6 +31,7 @@ impl<'r, 'o: 'r> Responder<'r, 'o> for ApiError {
             ApiError::Filesystem(_) => Err(Status::InternalServerError),
             ApiError::Charcoal(_) => Err(Status::InternalServerError),
             ApiError::Github(_) => Err(Status::InternalServerError),
+            ApiError::Ai(_) => Err(Status::InternalServerError),
         }
     }
 }
