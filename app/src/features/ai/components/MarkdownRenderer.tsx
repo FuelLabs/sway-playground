@@ -1,8 +1,8 @@
-import React from 'react';
-import ReactMarkdown from 'react-markdown';
-import { Box, Typography, Paper } from '@mui/material';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import React from "react";
+import ReactMarkdown from "react-markdown";
+import { Box, Typography, Paper } from "@mui/material";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vs } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 interface MarkdownComponentProps {
   children?: React.ReactNode;
@@ -16,29 +16,29 @@ interface MarkdownRendererProps {
 
 const markdownComponents = {
   code: ({ inline, className, children, ...props }: MarkdownComponentProps) => {
-    const match = /language-(\w+)/.exec(className || '');
+    const match = /language-(\w+)/.exec(className || "");
     return !inline && match ? (
       <SyntaxHighlighter
         style={vs}
         language={match[1]}
         PreTag="div"
-        customStyle={{ margin: '1em 0', borderRadius: '8px' }}
+        customStyle={{ margin: "1em 0", borderRadius: "8px" }}
         {...props}
       >
-        {String(children).replace(/\n$/, '')}
+        {String(children).replace(/\n$/, "")}
       </SyntaxHighlighter>
     ) : (
       <Box
         component="code"
         sx={{
-          backgroundColor: '#f0f0f0',
-          color: '#d73a49',
-          padding: '2px 6px',
-          borderRadius: '4px',
+          backgroundColor: "#f0f0f0",
+          color: "#d73a49",
+          padding: "2px 6px",
+          borderRadius: "4px",
           fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
-          fontSize: '0.875em',
+          fontSize: "0.875em",
           fontWeight: 600,
-          display: 'inline',
+          display: "inline",
         }}
         {...props}
       >
@@ -52,17 +52,29 @@ const markdownComponents = {
     </Typography>
   ),
   h1: ({ children }: MarkdownComponentProps) => (
-    <Typography component="h1" variant="h5" sx={{ mt: 2, mb: 1, fontWeight: 600 }}>
+    <Typography
+      component="h1"
+      variant="h5"
+      sx={{ mt: 2, mb: 1, fontWeight: 600 }}
+    >
       {children}
     </Typography>
   ),
   h2: ({ children }: MarkdownComponentProps) => (
-    <Typography component="h2" variant="h6" sx={{ mt: 2, mb: 1, fontWeight: 600 }}>
+    <Typography
+      component="h2"
+      variant="h6"
+      sx={{ mt: 2, mb: 1, fontWeight: 600 }}
+    >
       {children}
     </Typography>
   ),
   h3: ({ children }: MarkdownComponentProps) => (
-    <Typography component="h3" variant="subtitle1" sx={{ mt: 2, mb: 1, fontWeight: 600 }}>
+    <Typography
+      component="h3"
+      variant="subtitle1"
+      sx={{ mt: 2, mb: 1, fontWeight: 600 }}
+    >
       {children}
     </Typography>
   ),
@@ -83,28 +95,29 @@ const markdownComponents = {
   ),
 };
 
-export function MarkdownRenderer({ content, borderColor = '#00f58c' }: MarkdownRendererProps) {
+export function MarkdownRenderer({
+  content,
+  borderColor = "#00f58c",
+}: MarkdownRendererProps) {
   return (
     <Paper
       sx={{
         p: 2,
         borderRadius: 2,
         border: 1,
-        borderColor: 'divider',
-        '& blockquote': {
+        borderColor: "divider",
+        "& blockquote": {
           borderLeft: `4px solid ${borderColor}`,
           pl: 2,
           ml: 0,
           mr: 0,
-          fontStyle: 'italic',
-          color: 'text.secondary',
+          fontStyle: "italic",
+          color: "text.secondary",
           mb: 1,
         },
       }}
     >
-      <ReactMarkdown components={markdownComponents}>
-        {content}
-      </ReactMarkdown>
+      <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
     </Paper>
   );
 }

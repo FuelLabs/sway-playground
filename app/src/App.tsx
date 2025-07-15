@@ -139,16 +139,22 @@ function App() {
     setAiDialogOpen(true);
   }, []);
 
-  const onAICodeGenerated = useCallback((code: string) => {
-    track("AI Code Generated");
-    onSwayCodeChange(code);
-    setAiDialogOpen(false);
-  }, [onSwayCodeChange]);
+  const onAICodeGenerated = useCallback(
+    (code: string) => {
+      track("AI Code Generated");
+      onSwayCodeChange(code);
+      setAiDialogOpen(false);
+    },
+    [onSwayCodeChange],
+  );
 
-  const onAICodeFixed = useCallback((fixedCode: string) => {
-    track("AI Code Fixed");
-    onSwayCodeChange(fixedCode);
-  }, [onSwayCodeChange]);
+  const onAICodeFixed = useCallback(
+    (fixedCode: string) => {
+      track("AI Code Fixed");
+      onSwayCodeChange(fixedCode);
+    },
+    [onSwayCodeChange],
+  );
 
   useTranspile(
     codeToTranspile,
@@ -157,7 +163,14 @@ function App() {
     setError,
     updateLog,
   );
-  useCompile(codeToCompile, setError, setIsCompiled, updateLog, toolchain, onAICodeFixed);
+  useCompile(
+    codeToCompile,
+    setError,
+    setIsCompiled,
+    updateLog,
+    toolchain,
+    onAICodeFixed,
+  );
 
   return (
     <div

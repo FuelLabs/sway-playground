@@ -1,5 +1,9 @@
-import { aiService, SwayCodeGenerationRequest, SwayCodeGenerationResponse } from '../../../services/aiService';
-import { useAIService } from './useAIService';
+import {
+  aiService,
+  SwayCodeGenerationRequest,
+  SwayCodeGenerationResponse,
+} from "../../../services/aiService";
+import { useAIService } from "./useAIService";
 
 export interface AIGenerationState {
   isGenerating: boolean;
@@ -16,19 +20,19 @@ export interface UseAIGenerationReturn {
 
 export function useAIGeneration(): UseAIGenerationReturn {
   const { state, execute, clearResult, isAvailable } = useAIService(
-    aiService.generateSwayCode.bind(aiService)
+    aiService.generateSwayCode.bind(aiService),
   );
 
   const transformedState: AIGenerationState = {
     isGenerating: state.isLoading,
     result: state.result,
-    error: state.error
+    error: state.error,
   };
 
   return {
     state: transformedState,
     generateCode: execute,
     clearResult,
-    isAvailable
+    isAvailable,
   };
 }

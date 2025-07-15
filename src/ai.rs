@@ -24,7 +24,6 @@ struct MCPResponse {
 
 #[derive(serde::Deserialize)]
 struct MCPError {
-    code: i32,
     message: String,
 }
 
@@ -85,7 +84,7 @@ impl AIService {
             let functions = self.create_function_declarations();
             let mut request_builder = client.generate_content();
             request_builder =
-                request_builder.with_user_message(&format!("{}\n\n{}", system_prompt, user_prompt));
+                request_builder.with_user_message(format!("{}\n\n{}", system_prompt, user_prompt));
 
             for function in functions.iter() {
                 request_builder = request_builder.with_function(function.clone());
@@ -107,14 +106,13 @@ impl AIService {
 
                 let mut final_request = client
                     .generate_content()
-                    .with_user_message(&format!("{}\n\n{}", system_prompt, user_prompt));
+                    .with_user_message(format!("{}\n\n{}", system_prompt, user_prompt));
 
                 final_request
                     .contents
                     .push(response.candidates[0].content.clone());
 
-                let mut function_content = Content::default();
-                function_content.role = Some(Role::Function);
+                let mut function_content = Content { role: Some(Role::Function), ..Default::default() };
 
                 for (function_call, function_response) in function_responses {
                     let response_content = Content::function_response_json(
@@ -138,7 +136,7 @@ impl AIService {
         } else {
             let response = client
                 .generate_content()
-                .with_user_message(&format!("{}\n\n{}", system_prompt, user_prompt))
+                .with_user_message(format!("{}\n\n{}", system_prompt, user_prompt))
                 .execute()
                 .await
                 .map_err(|e| ApiError::Ai(format!("Gemini API error: {}", e)))?;
@@ -160,7 +158,7 @@ impl AIService {
         let system_prompt = self.get_error_analysis_prompt();
         let user_prompt = format!(
             "Fix this Sway compilation error by applying ONLY the necessary changes:\n\nERROR: {}\n\nCURRENT CODE:\n```sway\n{}\n```\n\nINSTRUCTIONS:\n1. If there are multiple errors, call 'searchDocumentation' for EACH DISTINCT error type\n2. Search documentation for each specific error pattern\n3. Identify the exact issue causing each error\n4. Apply MINIMAL fixes - change only what's broken\n5. Keep all working code unchanged\n6. Return the complete corrected contract\n\nCRITICAL: Return the entire corrected Sway contract in a ```sway code block. Fix ONLY the errors, don't refactor working code.",
-            request.error_message.to_string(), request.source_code
+            request.error_message, request.source_code
         );
 
         let client = self.client.as_ref().unwrap();
@@ -169,7 +167,7 @@ impl AIService {
             let functions = self.create_function_declarations();
             let mut request_builder = client
                 .generate_content()
-                .with_user_message(&format!("{}\n\n{}", system_prompt, user_prompt))
+                .with_user_message(format!("{}\n\n{}", system_prompt, user_prompt))
                 .with_function_calling_mode(FunctionCallingMode::Any)
                 .with_generation_config(GenerationConfig {
                     temperature: Some(0.7),
@@ -203,14 +201,13 @@ impl AIService {
 
                 let mut final_request = client
                     .generate_content()
-                    .with_user_message(&format!("{}\n\n{}", system_prompt, user_prompt));
+                    .with_user_message(format!("{}\n\n{}", system_prompt, user_prompt));
 
                 final_request
                     .contents
                     .push(response.candidates[0].content.clone());
 
-                let mut function_content = Content::default();
-                function_content.role = Some(Role::Function);
+                let mut function_content = Content { role: Some(Role::Function), ..Default::default() };
 
                 for (function_call, function_response) in function_responses.into_iter() {
                     let response_content = Content::function_response_json(
@@ -234,7 +231,7 @@ impl AIService {
         } else {
             let response = client
                 .generate_content()
-                .with_user_message(&format!("{}\n\n{}", system_prompt, user_prompt))
+                .with_user_message(format!("{}\n\n{}", system_prompt, user_prompt))
                 .execute()
                 .await
                 .map_err(|e| ApiError::Ai(format!("Gemini API error: {}", e)))?;
@@ -289,7 +286,7 @@ impl AIService {
         &self,
         function_call: &gemini_rust::FunctionCall,
     ) -> Result<Value, ApiError> {
-        let mcp_url = match &self.mcp_server_url {
+        let _mcp_url = match &self.mcp_server_url {
             Some(url) => url,
             None => {
                 return Ok(json!({
@@ -303,7 +300,7 @@ impl AIService {
             .get("query")
             .unwrap_or_else(|_| "sway".to_string());
 
-        let max_results: u64 = function_call.get("maxResults").unwrap_or_else(|_| 5);
+        let max_results: u64 = function_call.get("maxResults").unwrap_or(5);
 
         self.search_mcp_docs_internal(query, max_results).await
     }

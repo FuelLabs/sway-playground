@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react';
-import { aiService } from '../../../services/aiService';
+import { useState, useCallback } from "react";
+import { aiService } from "../../../services/aiService";
 
 export interface AIServiceState<TResult> {
   isLoading: boolean;
@@ -21,62 +21,69 @@ export interface UseAIServiceReturn<TRequest, TResult> {
 
 export function useAIService<TRequest, TResult>(
   serviceFunction: (request: TRequest) => Promise<TResult>,
-  options: UseAIServiceOptions<TResult> = {}
+  options: UseAIServiceOptions<TResult> = {},
 ): UseAIServiceReturn<TRequest, TResult> {
   const [state, setState] = useState<AIServiceState<TResult>>({
     isLoading: false,
     result: null,
-    error: null
+    error: null,
   });
 
   const isAvailable = aiService.isAvailable();
 
-  const execute = useCallback(async (request: TRequest) => {
-    if (!isAvailable) {
-      setState(prev => ({ 
-        ...prev, 
-        error: 'AI features are not enabled. Please configure your API key.' 
+  const execute = useCallback(
+    async (request: TRequest) => {
+      if (!isAvailable) {
+        setState((prev) => ({
+          ...prev,
+          error: "AI features are not enabled. Please configure your API key.",
+        }));
+        return;
+      }
+
+      setState((prev) => ({
+        ...prev,
+        isLoading: true,
+        error: null,
+        result: null,
       }));
-      return;
-    }
 
-    setState(prev => ({ 
-      ...prev, 
-      isLoading: true, 
-      error: null,
-      result: null
-    }));
+      try {
+        const result = await serviceFunction(request);
 
-    try {
-      const result = await serviceFunction(request);
+        setState((prev) => ({
+          ...prev,
+          isLoading: false,
+          result,
+        }));
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : "Operation failed";
+        setState((prev) => ({
+          ...prev,
+          isLoading: false,
+          error: errorMessage,
+        }));
+      }
+    },
+    [serviceFunction, isAvailable],
+  );
 
-      setState(prev => ({ 
-        ...prev, 
-        isLoading: false, 
-        result 
-      }));
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Operation failed';
-      setState(prev => ({ 
-        ...prev, 
-        isLoading: false, 
-        error: errorMessage 
-      }));
-    }
-  }, [serviceFunction, isAvailable]);
-
-  const apply = useCallback((result: TResult) => {
-    if (options.onApply) {
-      options.onApply(result);
-    }
-    clearResult();
-  }, [options.onApply]);
+  const apply = useCallback(
+    (result: TResult) => {
+      if (options.onApply) {
+        options.onApply(result);
+      }
+      clearResult();
+    },
+    [options.onApply],
+  );
 
   const clearResult = useCallback(() => {
     setState({
       isLoading: false,
       result: null,
-      error: null
+      error: null,
     });
   }, []);
 
@@ -85,6 +92,6 @@ export function useAIService<TRequest, TResult>(
     execute,
     apply: options.onApply ? apply : undefined,
     clearResult,
-    isAvailable
+    isAvailable,
   };
 }

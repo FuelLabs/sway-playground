@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useCopyToClipboard } from '../../../hooks/useCopyToClipboard';
+import { useState } from "react";
+import { useCopyToClipboard } from "../../../hooks/useCopyToClipboard";
 import {
   Dialog,
   DialogTitle,
@@ -13,47 +13,46 @@ import {
   Alert,
   Divider,
   Paper,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
-import AutoAwesome from '@mui/icons-material/AutoAwesome';
-import ContentCopy from '@mui/icons-material/ContentCopy';
-import CheckCircle from '@mui/icons-material/CheckCircle';
-import { useAIGeneration } from '../hooks/useAIGeneration';
-import { SwayCodeGenerationRequest } from '../../../services/aiService';
-import { MarkdownRenderer } from './MarkdownRenderer';
-import { removeCodeBlocks } from '../../../utils/aiHelpers';
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import AutoAwesome from "@mui/icons-material/AutoAwesome";
+import ContentCopy from "@mui/icons-material/ContentCopy";
+import CheckCircle from "@mui/icons-material/CheckCircle";
+import { useAIGeneration } from "../hooks/useAIGeneration";
+import { SwayCodeGenerationRequest } from "../../../services/aiService";
+import { MarkdownRenderer } from "./MarkdownRenderer";
+import { removeCodeBlocks } from "../../../utils/aiHelpers";
 
 const StyledDialog = styled(Dialog)(() => ({
-  '& .MuiPaper-root': {
-    borderRadius: '12px',
-    minWidth: '600px',
-    maxWidth: '800px',
+  "& .MuiPaper-root": {
+    borderRadius: "12px",
+    minWidth: "600px",
+    maxWidth: "800px",
   },
 }));
 
 const CodePreview = styled(Paper)(() => ({
-  backgroundColor: '#1e1e1e',
-  color: '#d4d4d4',
-  padding: '16px',
+  backgroundColor: "#1e1e1e",
+  color: "#d4d4d4",
+  padding: "16px",
   fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
-  fontSize: '14px',
-  maxHeight: '400px',
-  overflow: 'auto',
-  border: '1px solid #333',
-  borderRadius: '8px',
+  fontSize: "14px",
+  maxHeight: "400px",
+  overflow: "auto",
+  border: "1px solid #333",
+  borderRadius: "8px",
 }));
 
-
 const GenerateButton = styled(Button)(() => ({
-  background: 'linear-gradient(45deg, #00f58c, #00d4aa)',
-  color: '#000',
+  background: "linear-gradient(45deg, #00f58c, #00d4aa)",
+  color: "#000",
   fontWeight: 600,
-  '&:hover': {
-    background: 'linear-gradient(45deg, #00d4aa, #00b894)',
+  "&:hover": {
+    background: "linear-gradient(45deg, #00d4aa, #00b894)",
   },
-  '&:disabled': {
-    background: '#333',
-    color: '#666',
+  "&:disabled": {
+    background: "#333",
+    color: "#666",
   },
 }));
 
@@ -69,7 +68,7 @@ export function AIGenerationDialog({
   onCodeGenerated,
 }: AIGenerationDialogProps) {
   const { state, generateCode, clearResult, isAvailable } = useAIGeneration();
-  const [prompt, setPrompt] = useState('');
+  const [prompt, setPrompt] = useState("");
   const { copied, copyToClipboard, resetCopied } = useCopyToClipboard();
 
   const handleGenerate = async () => {
@@ -96,7 +95,7 @@ export function AIGenerationDialog({
   };
 
   const handleClose = () => {
-    setPrompt('');
+    setPrompt("");
     resetCopied();
     clearResult();
     onClose();
@@ -117,7 +116,8 @@ export function AIGenerationDialog({
         </DialogTitle>
         <DialogContent>
           <Alert severity="warning">
-            AI features are not available. Please configure your Gemini API key in the environment variables.
+            AI features are not available. Please configure your Gemini API key
+            in the environment variables.
           </Alert>
         </DialogContent>
         <DialogActions>
@@ -135,7 +135,7 @@ export function AIGenerationDialog({
           AI Code Generation
         </Box>
       </DialogTitle>
-      
+
       <DialogContent>
         <Box display="flex" flexDirection="column" gap={3}>
           {/* Input Form */}
@@ -154,11 +154,7 @@ export function AIGenerationDialog({
           </Box>
 
           {/* Error Display */}
-          {hasError && (
-            <Alert severity="error">
-              {state.error}
-            </Alert>
-          )}
+          {hasError && <Alert severity="error">{state.error}</Alert>}
 
           {/* Loading State */}
           {isGenerating && (
@@ -173,7 +169,12 @@ export function AIGenerationDialog({
           {/* Generated Code */}
           {hasResult && state.result && (
             <Box>
-              <Box display="flex" alignItems="center" justifyContent="space-between" mb={1}>
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+                mb={1}
+              >
                 <Box display="flex" alignItems="center" gap={1}>
                   <Typography variant="h6" color="primary">
                     Generated Contract
@@ -185,11 +186,10 @@ export function AIGenerationDialog({
                   onClick={handleCopyCode}
                   color={copied ? "success" : "primary"}
                 >
-                  {copied ? 'Copied!' : 'Copy Code'}
+                  {copied ? "Copied!" : "Copy Code"}
                 </Button>
               </Box>
 
-              
               <CodePreview>
                 <pre>{state.result.code}</pre>
               </CodePreview>
@@ -199,24 +199,32 @@ export function AIGenerationDialog({
                   <Typography variant="subtitle2" gutterBottom>
                     Explanation:
                   </Typography>
-                  <MarkdownRenderer content={removeCodeBlocks(state.result.explanation)} />
+                  <MarkdownRenderer
+                    content={removeCodeBlocks(state.result.explanation)}
+                  />
                 </Box>
               )}
 
-              {state.result.suggestions && state.result.suggestions.length > 0 && (
-                <Box mt={1}>
-                  <Typography variant="subtitle2" gutterBottom>
-                    Suggestions:
-                  </Typography>
-                  <Box component="ul" sx={{ mt: 0, pl: 2 }}>
-                    {state.result.suggestions.map((suggestion, index) => (
-                      <Typography key={index} component="li" variant="body2" color="text.secondary">
-                        {suggestion}
-                      </Typography>
-                    ))}
+              {state.result.suggestions &&
+                state.result.suggestions.length > 0 && (
+                  <Box mt={1}>
+                    <Typography variant="subtitle2" gutterBottom>
+                      Suggestions:
+                    </Typography>
+                    <Box component="ul" sx={{ mt: 0, pl: 2 }}>
+                      {state.result.suggestions.map((suggestion, index) => (
+                        <Typography
+                          key={index}
+                          component="li"
+                          variant="body2"
+                          color="text.secondary"
+                        >
+                          {suggestion}
+                        </Typography>
+                      ))}
+                    </Box>
                   </Box>
-                </Box>
-              )}
+                )}
             </Box>
           )}
         </Box>
@@ -228,18 +236,20 @@ export function AIGenerationDialog({
         <Button onClick={handleClose} disabled={isGenerating}>
           Cancel
         </Button>
-        
+
         {!hasResult && (
           <GenerateButton
             onClick={handleGenerate}
             disabled={!prompt.trim() || isGenerating}
-            startIcon={isGenerating ? <CircularProgress size={16} /> : <AutoAwesome />}
+            startIcon={
+              isGenerating ? <CircularProgress size={16} /> : <AutoAwesome />
+            }
             variant="contained"
           >
             Generate Contract
           </GenerateButton>
         )}
-        
+
         {hasResult && (
           <GenerateButton
             onClick={handleUseCode}

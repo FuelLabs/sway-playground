@@ -88,16 +88,23 @@ export function useCompile(
           const finalResults = [...results];
           if (aiService.isAvailable() && onCodeFixed && code) {
             finalResults.push(
-              <div key="fix-with-ai" style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid #333' }}>
+              <div
+                key="fix-with-ai"
+                style={{
+                  marginTop: "16px",
+                  paddingTop: "12px",
+                  borderTop: "1px solid #333",
+                }}
+              >
                 <FixWithAIButton
                   errorMessage={error}
                   sourceCode={code}
                   onCodeFixed={onCodeFixed}
                 />
-              </div>
+              </div>,
             );
           }
-          
+
           setResults(finalResults);
           setVersion(forcVersion);
           saveAbi("");

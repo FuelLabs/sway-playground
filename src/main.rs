@@ -24,7 +24,7 @@ use crate::types::{
 };
 use crate::{transpilation::solidity_to_sway, types::TranspileResponse};
 use rocket::serde::json::Json;
-use rocket::{catch, Request, State};
+use rocket::State;
 
 /// The endpoint to compile a Sway contract.
 #[post("/compile", data = "<request>")]

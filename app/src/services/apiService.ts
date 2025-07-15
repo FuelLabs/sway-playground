@@ -1,7 +1,7 @@
-import { SERVER_URI } from '../constants';
+import { SERVER_URI } from "../constants";
 
 export interface ApiRequestOptions {
-  method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  method?: "GET" | "POST" | "PUT" | "DELETE";
   headers?: Record<string, string>;
   timeout?: number;
 }
@@ -14,14 +14,14 @@ class ApiService {
   }
 
   private async makeRequest(
-    endpoint: string, 
-    data?: any, 
-    options: ApiRequestOptions = {}
+    endpoint: string,
+    data?: any,
+    options: ApiRequestOptions = {},
   ): Promise<any> {
-    const { 
-      method = data ? 'POST' : 'GET',
+    const {
+      method = data ? "POST" : "GET",
       headers = {},
-      timeout = 30000
+      timeout = 30000,
     } = options;
 
     const controller = new AbortController();
@@ -31,7 +31,7 @@ class ApiService {
       const response = await fetch(`${this.baseURL}${endpoint}`, {
         method,
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           ...headers,
         },
         body: data ? JSON.stringify(data) : undefined,
@@ -41,20 +41,24 @@ class ApiService {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        const error = await response.json().catch(() => ({ error: 'Request failed' }));
-        throw new Error(error.error || `HTTP ${response.status}: ${response.statusText}`);
+        const error = await response
+          .json()
+          .catch(() => ({ error: "Request failed" }));
+        throw new Error(
+          error.error || `HTTP ${response.status}: ${response.statusText}`,
+        );
       }
 
       return response.json();
     } catch (error) {
       clearTimeout(timeoutId);
       if (error instanceof Error) {
-        if (error.name === 'AbortError') {
-          throw new Error('Request timeout');
+        if (error.name === "AbortError") {
+          throw new Error("Request timeout");
         }
         throw error;
       }
-      throw new Error('Unknown error occurred');
+      throw new Error("Unknown error occurred");
     }
   }
 

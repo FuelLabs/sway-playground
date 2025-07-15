@@ -126,7 +126,6 @@ pub struct SwayCodeGenerationResponse {
 pub struct ErrorAnalysisRequest {
     pub error_message: String,
     pub source_code: String,
-    pub line_number: Option<u32>,
 }
 
 /// The response to an AI error analysis request.
