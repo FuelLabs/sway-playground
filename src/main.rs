@@ -18,13 +18,13 @@ use crate::cors::Cors;
 use crate::error::ApiResult;
 use crate::gist::GistClient;
 use crate::types::{
-    CompileRequest, CompileResponse, ErrorAnalysisRequest, ErrorAnalysisResponse, GistResponse, 
-    Language, NewGistRequest, NewGistResponse, SwayCodeGenerationRequest, SwayCodeGenerationResponse,
-    TranspileRequest,
+    CompileRequest, CompileResponse, ErrorAnalysisRequest, ErrorAnalysisResponse, GistResponse,
+    Language, NewGistRequest, NewGistResponse, SwayCodeGenerationRequest,
+    SwayCodeGenerationResponse, TranspileRequest,
 };
 use crate::{transpilation::solidity_to_sway, types::TranspileResponse};
 use rocket::serde::json::Json;
-use rocket::{State, Request, catch};
+use rocket::{catch, Request, State};
 
 /// The endpoint to compile a Sway contract.
 #[post("/compile", data = "<request>")]
@@ -97,15 +97,24 @@ fn health() -> String {
 fn rocket() -> _ {
     // Load environment variables from .env file
     dotenv::dotenv().ok();
-    
+
     let ai_service = AIService::new().expect("Failed to initialize AI service");
-    
+
     rocket::build()
         .manage(GistClient::default())
         .manage(ai_service)
         .attach(Cors)
         .mount(
             "/",
-            routes![compile, transpile, new_gist, get_gist, generate_sway_code, analyze_error, all_options, health],
+            routes![
+                compile,
+                transpile,
+                new_gist,
+                get_gist,
+                generate_sway_code,
+                analyze_error,
+                all_options,
+                health
+            ],
         )
 }

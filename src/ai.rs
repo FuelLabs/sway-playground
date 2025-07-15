@@ -3,7 +3,10 @@ use crate::types::{
     ErrorAnalysisRequest, ErrorAnalysisResponse, SwayCodeGenerationRequest,
     SwayCodeGenerationResponse,
 };
-use gemini_rust::{Content, FunctionDeclaration, FunctionParameters, FunctionCallingMode, Gemini, PropertyDetails, Role, GenerationConfig};
+use gemini_rust::{
+    Content, FunctionCallingMode, FunctionDeclaration, FunctionParameters, Gemini,
+    GenerationConfig, PropertyDetails, Role,
+};
 use serde_json::{json, Value};
 use std::env;
 
@@ -41,7 +44,8 @@ impl AIService {
         let api_key = env::var("GEMINI_API_KEY").ok();
         let mcp_server_url = env::var("MCP_SERVER_URL").ok();
 
-        let client = api_key.map(|key| Gemini::with_model(key, "models/gemini-2.5-flash".to_string()));
+        let client =
+            api_key.map(|key| Gemini::with_model(key, "models/gemini-2.5-flash".to_string()));
         let http_client = reqwest::Client::new();
 
         Ok(AIService {
@@ -80,7 +84,8 @@ impl AIService {
         if self.is_mcp_available() {
             let functions = self.create_function_declarations();
             let mut request_builder = client.generate_content();
-            request_builder = request_builder.with_user_message(&format!("{}\n\n{}", system_prompt, user_prompt));
+            request_builder =
+                request_builder.with_user_message(&format!("{}\n\n{}", system_prompt, user_prompt));
 
             for function in functions.iter() {
                 request_builder = request_builder.with_function(function.clone());
@@ -95,7 +100,8 @@ impl AIService {
             if !function_calls.is_empty() {
                 let mut function_responses = Vec::new();
                 for function_call in function_calls.iter() {
-                    let function_response = self.handle_function_call_response(function_call).await?;
+                    let function_response =
+                        self.handle_function_call_response(function_call).await?;
                     function_responses.push((function_call, function_response));
                 }
 
@@ -103,16 +109,21 @@ impl AIService {
                     .generate_content()
                     .with_user_message(&format!("{}\n\n{}", system_prompt, user_prompt));
 
-                final_request.contents.push(response.candidates[0].content.clone());
+                final_request
+                    .contents
+                    .push(response.candidates[0].content.clone());
 
                 let mut function_content = Content::default();
                 function_content.role = Some(Role::Function);
-                
+
                 for (function_call, function_response) in function_responses {
-                    let response_content = Content::function_response_json(function_call.name.clone(), function_response);
+                    let response_content = Content::function_response_json(
+                        function_call.name.clone(),
+                        function_response,
+                    );
                     function_content.parts.extend(response_content.parts);
                 }
-                
+
                 final_request.contents.push(function_content);
 
                 let final_response = final_request
@@ -160,15 +171,16 @@ impl AIService {
                 .generate_content()
                 .with_user_message(&format!("{}\n\n{}", system_prompt, user_prompt))
                 .with_function_calling_mode(FunctionCallingMode::Any)
-                 .with_generation_config(GenerationConfig {
+                .with_generation_config(GenerationConfig {
                     temperature: Some(0.7),
                     top_p: Some(0.95),
                     top_k: Some(40),
-                    max_output_tokens: Some(8192), candidate_count: Some(1),
-            stop_sequences: Some(vec!["END".to_string()]),
-            response_mime_type: None,
-            response_schema: None,}
-                );
+                    max_output_tokens: Some(8192),
+                    candidate_count: Some(1),
+                    stop_sequences: Some(vec!["END".to_string()]),
+                    response_mime_type: None,
+                    response_schema: None,
+                });
 
             for function in &functions {
                 request_builder = request_builder.with_function(function.clone());
@@ -180,11 +192,12 @@ impl AIService {
                 .map_err(|e| ApiError::Ai(format!("Gemini API error: {}", e)))?;
 
             let function_calls = response.function_calls();
-            
+
             if !function_calls.is_empty() {
                 let mut function_responses = Vec::new();
                 for function_call in function_calls.iter() {
-                    let function_response = self.handle_function_call_response(function_call).await?;
+                    let function_response =
+                        self.handle_function_call_response(function_call).await?;
                     function_responses.push((function_call, function_response));
                 }
 
@@ -192,16 +205,21 @@ impl AIService {
                     .generate_content()
                     .with_user_message(&format!("{}\n\n{}", system_prompt, user_prompt));
 
-                final_request.contents.push(response.candidates[0].content.clone());
+                final_request
+                    .contents
+                    .push(response.candidates[0].content.clone());
 
                 let mut function_content = Content::default();
                 function_content.role = Some(Role::Function);
-                
+
                 for (function_call, function_response) in function_responses.into_iter() {
-                    let response_content = Content::function_response_json(function_call.name.clone(), function_response);
+                    let response_content = Content::function_response_json(
+                        function_call.name.clone(),
+                        function_response,
+                    );
                     function_content.parts.extend(response_content.parts);
                 }
-                
+
                 final_request.contents.push(function_content);
 
                 let final_response = final_request
@@ -284,9 +302,9 @@ impl AIService {
         let query: String = function_call
             .get("query")
             .unwrap_or_else(|_| "sway".to_string());
-        
+
         let max_results: u64 = function_call.get("maxResults").unwrap_or_else(|_| 5);
-        
+
         self.search_mcp_docs_internal(query, max_results).await
     }
 
@@ -325,7 +343,7 @@ impl AIService {
         // Just delegate to the main search function which handles SSE properly
         self.search_mcp_docs_internal(query, max_results).await
     }
-    
+
     async fn search_mcp_docs_internal(
         &self,
         query: String,
@@ -362,14 +380,15 @@ impl AIService {
             .json(&request_body)
             .send()
             .await;
-        
+
         match response_result {
             Ok(response) => {
                 if response.status().is_success() {
-                    let response_text = response.text().await.map_err(|e| {
-                        ApiError::Ai(format!("Failed to get response text: {}", e))
-                    })?;
-                    
+                    let response_text = response
+                        .text()
+                        .await
+                        .map_err(|e| ApiError::Ai(format!("Failed to get response text: {}", e)))?;
+
                     let json_data = if response_text.starts_with("event:") {
                         response_text
                             .lines()
@@ -379,10 +398,11 @@ impl AIService {
                     } else {
                         &response_text
                     };
-                    
-                    let mcp_response: MCPResponse = serde_json::from_str(json_data).map_err(|e| {
-                        ApiError::Ai(format!("Failed to parse MCP response: {}", e))
-                    })?;
+
+                    let mcp_response: MCPResponse =
+                        serde_json::from_str(json_data).map_err(|e| {
+                            ApiError::Ai(format!("Failed to parse MCP response: {}", e))
+                        })?;
 
                     if let Some(error) = mcp_response.error {
                         Ok(json!({
@@ -390,7 +410,8 @@ impl AIService {
                             "fallback": "Check docs.fuel.network/docs/sway/ for documentation"
                         }))
                     } else if let Some(result) = mcp_response.result {
-                        if let Ok(tool_response) = serde_json::from_value::<MCPToolResponse>(result.clone())
+                        if let Ok(tool_response) =
+                            serde_json::from_value::<MCPToolResponse>(result.clone())
                         {
                             let results: Vec<Value> = tool_response
                                 .content
@@ -434,12 +455,10 @@ impl AIService {
                     }))
                 }
             }
-            Err(e) => {
-                Ok(json!({
-                    "error": format!("Failed to connect to MCP server: {}", e),
-                    "fallback": "Check docs.fuel.network/docs/sway/ for documentation"
-                }))
-            }
+            Err(e) => Ok(json!({
+                "error": format!("Failed to connect to MCP server: {}", e),
+                "fallback": "Check docs.fuel.network/docs/sway/ for documentation"
+            })),
         }
     }
 
