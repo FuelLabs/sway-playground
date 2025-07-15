@@ -84,7 +84,7 @@ impl AIService {
             let functions = self.create_function_declarations();
             let mut request_builder = client.generate_content();
             request_builder =
-                request_builder.with_user_message(format!("{}\n\n{}", system_prompt, user_prompt));
+                request_builder.with_user_message(format!("{system_prompt}\n\n{user_prompt}"));
 
             for function in functions.iter() {
                 request_builder = request_builder.with_function(function.clone());
@@ -93,7 +93,7 @@ impl AIService {
             let response = request_builder
                 .execute()
                 .await
-                .map_err(|e| ApiError::Ai(format!("Gemini API error: {}", e)))?;
+                .map_err(|e| ApiError::Ai(format!("Gemini API error: {e}")))?;
 
             let function_calls = response.function_calls();
             if !function_calls.is_empty() {
@@ -106,13 +106,16 @@ impl AIService {
 
                 let mut final_request = client
                     .generate_content()
-                    .with_user_message(format!("{}\n\n{}", system_prompt, user_prompt));
+                    .with_user_message(format!("{system_prompt}\n\n{user_prompt}"));
 
                 final_request
                     .contents
                     .push(response.candidates[0].content.clone());
 
-                let mut function_content = Content { role: Some(Role::Function), ..Default::default() };
+                let mut function_content = Content {
+                    role: Some(Role::Function),
+                    ..Default::default()
+                };
 
                 for (function_call, function_response) in function_responses {
                     let response_content = Content::function_response_json(
@@ -127,7 +130,7 @@ impl AIService {
                 let final_response = final_request
                     .execute()
                     .await
-                    .map_err(|e| ApiError::Ai(format!("Gemini API error: {}", e)))?;
+                    .map_err(|e| ApiError::Ai(format!("Gemini API error: {e}")))?;
 
                 self.parse_code_generation_response(&final_response.text())
             } else {
@@ -136,10 +139,10 @@ impl AIService {
         } else {
             let response = client
                 .generate_content()
-                .with_user_message(format!("{}\n\n{}", system_prompt, user_prompt))
+                .with_user_message(format!("{system_prompt}\n\n{user_prompt}"))
                 .execute()
                 .await
-                .map_err(|e| ApiError::Ai(format!("Gemini API error: {}", e)))?;
+                .map_err(|e| ApiError::Ai(format!("Gemini API error: {e}")))?;
 
             self.parse_code_generation_response(&response.text())
         }
@@ -167,7 +170,7 @@ impl AIService {
             let functions = self.create_function_declarations();
             let mut request_builder = client
                 .generate_content()
-                .with_user_message(format!("{}\n\n{}", system_prompt, user_prompt))
+                .with_user_message(format!("{system_prompt}\n\n{user_prompt}"))
                 .with_function_calling_mode(FunctionCallingMode::Any)
                 .with_generation_config(GenerationConfig {
                     temperature: Some(0.7),
@@ -187,7 +190,7 @@ impl AIService {
             let response = request_builder
                 .execute()
                 .await
-                .map_err(|e| ApiError::Ai(format!("Gemini API error: {}", e)))?;
+                .map_err(|e| ApiError::Ai(format!("Gemini API error: {e}")))?;
 
             let function_calls = response.function_calls();
 
@@ -201,13 +204,16 @@ impl AIService {
 
                 let mut final_request = client
                     .generate_content()
-                    .with_user_message(format!("{}\n\n{}", system_prompt, user_prompt));
+                    .with_user_message(format!("{system_prompt}\n\n{user_prompt}"));
 
                 final_request
                     .contents
                     .push(response.candidates[0].content.clone());
 
-                let mut function_content = Content { role: Some(Role::Function), ..Default::default() };
+                let mut function_content = Content {
+                    role: Some(Role::Function),
+                    ..Default::default()
+                };
 
                 for (function_call, function_response) in function_responses.into_iter() {
                     let response_content = Content::function_response_json(
@@ -222,7 +228,7 @@ impl AIService {
                 let final_response = final_request
                     .execute()
                     .await
-                    .map_err(|e| ApiError::Ai(format!("Gemini API error: {}", e)))?;
+                    .map_err(|e| ApiError::Ai(format!("Gemini API error: {e}")))?;
 
                 self.parse_error_analysis_response(&final_response.text())
             } else {
@@ -231,10 +237,10 @@ impl AIService {
         } else {
             let response = client
                 .generate_content()
-                .with_user_message(format!("{}\n\n{}", system_prompt, user_prompt))
+                .with_user_message(format!("{system_prompt}\n\n{user_prompt}"))
                 .execute()
                 .await
-                .map_err(|e| ApiError::Ai(format!("Gemini API error: {}", e)))?;
+                .map_err(|e| ApiError::Ai(format!("Gemini API error: {e}")))?;
 
             self.parse_error_analysis_response(&response.text())
         }
@@ -384,7 +390,7 @@ impl AIService {
                     let response_text = response
                         .text()
                         .await
-                        .map_err(|e| ApiError::Ai(format!("Failed to get response text: {}", e)))?;
+                        .map_err(|e| ApiError::Ai(format!("Failed to get response text: {e}")))?;
 
                     let json_data = if response_text.starts_with("event:") {
                         response_text
@@ -398,7 +404,7 @@ impl AIService {
 
                     let mcp_response: MCPResponse =
                         serde_json::from_str(json_data).map_err(|e| {
-                            ApiError::Ai(format!("Failed to parse MCP response: {}", e))
+                            ApiError::Ai(format!("Failed to parse MCP response: {e}"))
                         })?;
 
                     if let Some(error) = mcp_response.error {

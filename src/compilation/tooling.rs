@@ -23,6 +23,6 @@ pub fn build_project(project_name: String) -> Output {
         Command::new(FORC)
             .arg("build")
             .arg("--path")
-            .arg(format!("projects/{}", project_name)),
+            .arg(format!("projects/{project_name}")),
     )
 }
