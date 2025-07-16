@@ -533,7 +533,7 @@ SWAY SYNTAX ESSENTIALS:
 
 IMPORTS:
 - use std::{asset::{mint_to, transfer}, call_frames::msg_asset_id, context::msg_amount, auth::msg_sender, block::timestamp, asset::transfer};
-- use standards::{src3::SRC3, src5::SRC5, src20::SRC20};
+- use src3::SRC3, src5::SRC5, src20::SRC20; and so on., standards::srcX is deprecated.
 
 FALLBACK: If documentation search fails, direct users to docs.fuel.network/docs/sway/"#.to_string()
     }
