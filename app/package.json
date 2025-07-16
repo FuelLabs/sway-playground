@@ -58,6 +58,7 @@
     "start": "DISABLE_ESLINT_PLUGIN=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:ai": "react-scripts test --testPathPattern=__tests__/e2e/ai --watchAll=false",
     "eject": "react-scripts eject",
     "lint": "eslint --fix 'src/**/*.{ts,tsx}'",
     "lint-check": "eslint 'src/**/*.{ts,tsx}'",
@@ -88,5 +89,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "jest": {
+    "globalSetup": "<rootDir>/src/test-utils/setup/global-setup.ts"
   }
 }
