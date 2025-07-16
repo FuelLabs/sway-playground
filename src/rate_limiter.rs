@@ -1,3 +1,4 @@
+use crate::types::RateLimitStatus;
 use chrono::{DateTime, Utc};
 use dashmap::DashMap;
 use rocket::request::{FromRequest, Outcome};
@@ -8,7 +9,6 @@ use std::str::FromStr;
 use std::sync::Arc;
 use std::time::Duration;
 use tokio::time::interval;
-use crate::types::RateLimitStatus;
 
 const DAY_SECONDS: u64 = 86400;
 
@@ -63,7 +63,7 @@ impl RequestRecord {
     fn reset_if_expired(&mut self) -> bool {
         let now = Utc::now();
         let elapsed = now.signed_duration_since(self.window_start);
-        
+
         if elapsed.num_seconds() > DAY_SECONDS as i64 {
             self.count = 0;
             self.window_start = now;
@@ -82,7 +82,7 @@ pub struct RateLimiter {
 impl RateLimiter {
     pub fn new(config: RateLimitConfig) -> Self {
         let storage = Arc::new(DashMap::new());
-        
+
         let limiter = Self {
             storage: storage.clone(),
             config: config.clone(),
@@ -94,9 +94,9 @@ impl RateLimiter {
 
     pub fn check_rate_limit(&self, ip: IpAddr) -> Result<(), RateLimitError> {
         let mut entry = self.storage.entry(ip).or_insert_with(RequestRecord::new);
-        
+
         entry.reset_if_expired();
-        
+
         if entry.count < self.config.requests_per_day {
             entry.count += 1;
             Ok(())
@@ -113,7 +113,7 @@ impl RateLimiter {
         if let Some(entry) = self.storage.get(&ip) {
             let now = Utc::now();
             let elapsed = now.signed_duration_since(entry.window_start);
-            
+
             if elapsed.num_seconds() > DAY_SECONDS as i64 {
                 RateLimitStatus {
                     requests_remaining: self.config.requests_per_day,
@@ -150,23 +150,23 @@ impl RateLimiter {
     fn start_cleanup_task(&self) {
         let storage = self.storage.clone();
         let cleanup_interval = Duration::from_secs(self.config.cleanup_interval_minutes * 60);
-        
+
         tokio::spawn(async move {
             let mut interval = interval(cleanup_interval);
-            
+
             loop {
                 interval.tick().await;
-                
+
                 let now = Utc::now();
                 let mut to_remove = Vec::new();
-                
+
                 for entry in storage.iter() {
                     let elapsed = now.signed_duration_since(entry.window_start);
                     if elapsed.num_seconds() > DAY_SECONDS as i64 {
                         to_remove.push(*entry.key());
                     }
                 }
-                
+
                 for ip in to_remove {
                     storage.remove(&ip);
                 }
@@ -187,7 +187,11 @@ impl std::fmt::Display for RateLimitError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             RateLimitError::LimitExceeded { limit, reset_time } => {
-                write!(f, "Rate limit exceeded. Limit: {} requests per day. Reset at: {}", limit, reset_time)
+                write!(
+                    f,
+                    "Rate limit exceeded. Limit: {} requests per day. Reset at: {}",
+                    limit, reset_time
+                )
             }
         }
     }
@@ -195,9 +199,7 @@ impl std::fmt::Display for RateLimitError {
 
 impl std::error::Error for RateLimitError {}
 
-pub struct RateLimitGuard {
-    pub ip: IpAddr,
-}
+pub struct RateLimitGuard;
 
 pub struct ClientIp(pub IpAddr);
 
@@ -218,17 +220,22 @@ impl<'r> FromRequest<'r> for RateLimitGuard {
     async fn from_request(request: &'r Request<'_>) -> Outcome<Self, Self::Error> {
         let rate_limiter = match request.guard::<&State<RateLimiter>>().await {
             Outcome::Success(limiter) => limiter,
-            Outcome::Failure((status, _)) => return Outcome::Failure((status, RateLimitError::LimitExceeded { 
-                limit: 0, 
-                reset_time: chrono::Utc::now() 
-            })),
+            Outcome::Failure((status, _)) => {
+                return Outcome::Failure((
+                    status,
+                    RateLimitError::LimitExceeded {
+                        limit: 0,
+                        reset_time: chrono::Utc::now(),
+                    },
+                ))
+            }
             Outcome::Forward(f) => return Outcome::Forward(f),
         };
 
         let ip = extract_client_ip(request).unwrap_or_else(|| "127.0.0.1".parse().unwrap());
 
         match rate_limiter.check_rate_limit(ip) {
-            Ok(()) => Outcome::Success(RateLimitGuard { ip }),
+            Ok(()) => Outcome::Success(RateLimitGuard),
             Err(e) => Outcome::Failure((Status::TooManyRequests, e)),
         }
     }
@@ -252,6 +259,5 @@ pub fn extract_client_ip(request: &Request) -> Option<IpAddr> {
     }
 
     // Fall back to remote address
-    request.remote()
-        .map(|addr| addr.ip())
+    request.remote().map(|addr| addr.ip())
 }

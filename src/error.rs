@@ -1,3 +1,5 @@
+use crate::rate_limiter::RateLimitError;
+use crate::types::RateLimitErrorResponse;
 use rocket::{
     http::Status,
     response::Responder,
@@ -5,8 +7,6 @@ use rocket::{
     Request,
 };
 use thiserror::Error;
-use crate::rate_limiter::RateLimitError;
-use crate::types::RateLimitErrorResponse;
 
 /// A wrapper for API responses that can return errors.
 pub type ApiResult<T> = Result<Json<T>, ApiError>;
@@ -45,7 +45,7 @@ impl<'r, 'o: 'r> Responder<'r, 'o> for ApiError {
                     reset_time,
                     retry_after_seconds: retry_after,
                 };
-                
+
                 let json_response = Json(error_response);
                 let mut response = json_response.respond_to(_request)?;
                 response.set_status(Status::TooManyRequests);

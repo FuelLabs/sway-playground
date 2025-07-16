@@ -18,11 +18,11 @@ use crate::compilation::build_and_destroy_project;
 use crate::cors::Cors;
 use crate::error::ApiResult;
 use crate::gist::GistClient;
-use crate::rate_limiter::{RateLimiter, RateLimitConfig, RateLimitGuard, ClientIp};
+use crate::rate_limiter::{ClientIp, RateLimitConfig, RateLimitGuard, RateLimiter};
 use crate::types::{
     CompileRequest, CompileResponse, ErrorAnalysisRequest, ErrorAnalysisResponse, GistResponse,
-    Language, NewGistRequest, NewGistResponse, SwayCodeGenerationRequest,
-    SwayCodeGenerationResponse, TranspileRequest, RateLimitStatus,
+    Language, NewGistRequest, NewGistResponse, RateLimitStatus, SwayCodeGenerationRequest,
+    SwayCodeGenerationResponse, TranspileRequest,
 };
 use crate::{transpilation::solidity_to_sway, types::TranspileResponse};
 use rocket::serde::json::Json;
