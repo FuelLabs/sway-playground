@@ -69,11 +69,15 @@ export function AIGenerationDialog({
   onClose,
   onCodeGenerated,
 }: AIGenerationDialogProps) {
-  const { status: rateLimitStatus, fetchStatus: fetchRateLimitStatus, updateStatusAfterError } = useRateLimitStatus();
+  const {
+    status: rateLimitStatus,
+    fetchStatus: fetchRateLimitStatus,
+    updateStatusAfterError,
+  } = useRateLimitStatus();
   const { state, generateCode, clearResult, isAvailable } = useAIGeneration({
     onRateLimitError: (error) => {
       updateStatusAfterError(error);
-    }
+    },
   });
   const [prompt, setPrompt] = useState("");
   const { copied, copyToClipboard, resetCopied } = useCopyToClipboard();
@@ -155,8 +159,8 @@ export function AIGenerationDialog({
       <DialogContent>
         <Box display="flex" flexDirection="column" gap={3}>
           {/* Input Form */}
-          <Box sx={{ position: 'relative' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 1 }}>
+          <Box sx={{ position: "relative" }}>
+            <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 1 }}>
               <RateLimitDisplay status={rateLimitStatus} />
             </Box>
             <TextField
@@ -167,7 +171,9 @@ export function AIGenerationDialog({
               placeholder="e.g., Create a token contract with minting functionality and transfer capabilities"
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              disabled={isGenerating || (rateLimitStatus?.requestsRemaining === 0)}
+              disabled={
+                isGenerating || rateLimitStatus?.requestsRemaining === 0
+              }
               variant="outlined"
             />
           </Box>
@@ -259,13 +265,19 @@ export function AIGenerationDialog({
         {!hasResult && (
           <GenerateButton
             onClick={handleGenerate}
-            disabled={!prompt.trim() || isGenerating || (rateLimitStatus?.requestsRemaining === 0)}
+            disabled={
+              !prompt.trim() ||
+              isGenerating ||
+              rateLimitStatus?.requestsRemaining === 0
+            }
             startIcon={
               isGenerating ? <CircularProgress size={16} /> : <AutoAwesome />
             }
             variant="contained"
           >
-            {rateLimitStatus?.requestsRemaining === 0 ? 'Limit Reached' : 'Generate Contract'}
+            {rateLimitStatus?.requestsRemaining === 0
+              ? "Limit Reached"
+              : "Generate Contract"}
           </GenerateButton>
         )}
 

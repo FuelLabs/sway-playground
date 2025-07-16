@@ -125,7 +125,7 @@ export function useCompile(
         setServerError(true);
       });
     setIsCompiled(true);
-  }, [code, setIsCompiled, setResults, toolchain]);
+  }, [code, setIsCompiled, setResults, toolchain, onCodeFixed]);
 
   useEffect(() => {
     if (serverError) {

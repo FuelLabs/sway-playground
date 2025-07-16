@@ -41,15 +41,15 @@ export class RateLimitError extends Error {
     message: string,
     public readonly requestsLimit: number,
     public readonly resetTime: string,
-    public readonly retryAfterSeconds: number
+    public readonly retryAfterSeconds: number,
   ) {
     super(message);
-    this.name = 'RateLimitError';
+    this.name = "RateLimitError";
   }
 }
 
 class AIService {
-  private async makeRequest<T>(endpoint: string, data: any): Promise<T> {
+  private async makeRequest<T>(endpoint: string, data: unknown): Promise<T> {
     const response = await fetch(`${SERVER_URI}${endpoint}`, {
       method: "POST",
       headers: {
@@ -61,18 +61,18 @@ class AIService {
     if (!response.ok) {
       if (response.status === 429) {
         // Rate limit error - parse the enhanced error response
-        const errorData = await response
-          .json()
-          .catch(() => ({ error: "Rate limit exceeded" })) as RateLimitErrorResponse;
-        
+        const errorData = (await response.json().catch(() => ({
+          error: "Rate limit exceeded",
+        }))) as RateLimitErrorResponse;
+
         throw new RateLimitError(
           errorData.error || "Rate limit exceeded",
           errorData.requestsLimit,
           errorData.resetTime,
-          errorData.retryAfterSeconds
+          errorData.retryAfterSeconds,
         );
       }
-      
+
       const errorData = await response
         .json()
         .catch(() => ({ error: "Unknown error" }));

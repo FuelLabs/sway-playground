@@ -6,7 +6,9 @@ import { vs } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 interface MarkdownComponentProps {
   children?: React.ReactNode;
-  [key: string]: any;
+  inline?: boolean;
+  className?: string;
+  [key: string]: unknown;
 }
 
 interface MarkdownRendererProps {

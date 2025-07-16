@@ -23,7 +23,9 @@ export interface UseAIGenerationOptions {
   onRateLimitError?: (error: RateLimitError) => void;
 }
 
-export function useAIGeneration(options: UseAIGenerationOptions = {}): UseAIGenerationReturn {
+export function useAIGeneration(
+  options: UseAIGenerationOptions = {},
+): UseAIGenerationReturn {
   const { state, execute, clearResult, isAvailable } = useAIService(
     aiService.generateSwayCode.bind(aiService),
     {

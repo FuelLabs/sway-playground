@@ -122,11 +122,7 @@ impl RateLimiter {
                     window_duration_seconds: DAY_SECONDS,
                 }
             } else {
-                let remaining = if entry.count >= self.config.requests_per_day {
-                    0
-                } else {
-                    self.config.requests_per_day - entry.count
-                };
+                let remaining = self.config.requests_per_day.saturating_sub(entry.count);
 
                 let reset_time = entry.window_start + chrono::Duration::seconds(DAY_SECONDS as i64);
 
@@ -189,8 +185,7 @@ impl std::fmt::Display for RateLimitError {
             RateLimitError::LimitExceeded { limit, reset_time } => {
                 write!(
                     f,
-                    "Rate limit exceeded. Limit: {} requests per day. Reset at: {}",
-                    limit, reset_time
+                    "Rate limit exceeded. Limit: {limit} requests per day. Reset at: {reset_time}"
                 )
             }
         }

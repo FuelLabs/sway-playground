@@ -34,6 +34,15 @@ export function useAIService<TRequest, TResult>(
 
   const isAvailable = aiService.isAvailable();
 
+  const clearResult = useCallback(() => {
+    setState({
+      isLoading: false,
+      result: null,
+      error: null,
+      rateLimitError: undefined,
+    });
+  }, []);
+
   const execute = useCallback(
     async (request: TRequest) => {
       if (!isAvailable) {
@@ -68,7 +77,7 @@ export function useAIService<TRequest, TResult>(
             error: error.message,
             rateLimitError: error,
           }));
-          
+
           if (options.onRateLimitError) {
             options.onRateLimitError(error);
           }
@@ -83,7 +92,7 @@ export function useAIService<TRequest, TResult>(
         }
       }
     },
-    [serviceFunction, isAvailable],
+    [serviceFunction, isAvailable, options],
   );
 
   const apply = useCallback(
@@ -93,17 +102,8 @@ export function useAIService<TRequest, TResult>(
       }
       clearResult();
     },
-    [options.onApply],
+    [options, clearResult],
   );
-
-  const clearResult = useCallback(() => {
-    setState({
-      isLoading: false,
-      result: null,
-      error: null,
-      rateLimitError: undefined,
-    });
-  }, []);
 
   return {
     state,

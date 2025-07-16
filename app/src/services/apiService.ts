@@ -15,9 +15,9 @@ class ApiService {
 
   private async makeRequest(
     endpoint: string,
-    data?: any,
+    data?: unknown,
     options: ApiRequestOptions = {},
-  ): Promise<any> {
+  ): Promise<unknown> {
     const {
       method = data ? "POST" : "GET",
       headers = {},

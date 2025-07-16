@@ -1,5 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
-import { aiService, RateLimitStatus, RateLimitError } from '../../../services/aiService';
+import { useState, useEffect, useCallback } from "react";
+import {
+  aiService,
+  RateLimitStatus,
+  RateLimitError,
+} from "../../../services/aiService";
 
 export function useRateLimitStatus() {
   const [status, setStatus] = useState<RateLimitStatus | null>(null);
@@ -13,20 +17,27 @@ export function useRateLimitStatus() {
       const rateLimitStatus = await aiService.getRateLimitStatus();
       setStatus(rateLimitStatus);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch rate limit status');
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to fetch rate limit status",
+      );
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  const updateStatusAfterError = useCallback((rateLimitError: RateLimitError) => {
-    setStatus({
-      requestsRemaining: 0,
-      requestsLimit: rateLimitError.requestsLimit,
-      resetTime: rateLimitError.resetTime,
-      windowDurationSeconds: rateLimitError.retryAfterSeconds,
-    });
-  }, []);
+  const updateStatusAfterError = useCallback(
+    (rateLimitError: RateLimitError) => {
+      setStatus({
+        requestsRemaining: 0,
+        requestsLimit: rateLimitError.requestsLimit,
+        resetTime: rateLimitError.resetTime,
+        windowDurationSeconds: rateLimitError.retryAfterSeconds,
+      });
+    },
+    [],
+  );
 
   const resetStatus = useCallback(() => {
     setStatus(null);

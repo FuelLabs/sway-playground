@@ -29,7 +29,7 @@ export function useErrorAnalysis(
   onCodeFixed?: (code: string) => void,
   options: UseErrorAnalysisOptions = {},
 ): UseErrorAnalysisReturn {
-  const { state, execute, apply, clearResult, isAvailable } = useAIService(
+  const { state, execute, clearResult, isAvailable } = useAIService(
     aiService.analyzeError.bind(aiService),
     {
       onApply: (result: ErrorAnalysisResponse) => {
