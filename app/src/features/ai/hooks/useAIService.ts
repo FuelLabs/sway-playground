@@ -1,14 +1,16 @@
 import { useState, useCallback } from "react";
-import { aiService } from "../../../services/aiService";
+import { aiService, RateLimitError } from "../../../services/aiService";
 
 export interface AIServiceState<TResult> {
   isLoading: boolean;
   result: TResult | null;
   error: string | null;
+  rateLimitError?: RateLimitError;
 }
 
 export interface UseAIServiceOptions<TResult> {
   onApply?: (result: TResult) => void;
+  onRateLimitError?: (error: RateLimitError) => void;
 }
 
 export interface UseAIServiceReturn<TRequest, TResult> {
@@ -27,6 +29,7 @@ export function useAIService<TRequest, TResult>(
     isLoading: false,
     result: null,
     error: null,
+    rateLimitError: undefined,
   });
 
   const isAvailable = aiService.isAvailable();
@@ -46,6 +49,7 @@ export function useAIService<TRequest, TResult>(
         isLoading: true,
         error: null,
         result: null,
+        rateLimitError: undefined,
       }));
 
       try {
@@ -57,13 +61,26 @@ export function useAIService<TRequest, TResult>(
           result,
         }));
       } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : "Operation failed";
-        setState((prev) => ({
-          ...prev,
-          isLoading: false,
-          error: errorMessage,
-        }));
+        if (error instanceof RateLimitError) {
+          setState((prev) => ({
+            ...prev,
+            isLoading: false,
+            error: error.message,
+            rateLimitError: error,
+          }));
+          
+          if (options.onRateLimitError) {
+            options.onRateLimitError(error);
+          }
+        } else {
+          const errorMessage =
+            error instanceof Error ? error.message : "Operation failed";
+          setState((prev) => ({
+            ...prev,
+            isLoading: false,
+            error: errorMessage,
+          }));
+        }
       }
     },
     [serviceFunction, isAvailable],
@@ -84,6 +101,7 @@ export function useAIService<TRequest, TResult>(
       isLoading: false,
       result: null,
       error: null,
+      rateLimitError: undefined,
     });
   }, []);
 

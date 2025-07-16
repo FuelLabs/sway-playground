@@ -2,6 +2,7 @@ import {
   aiService,
   SwayCodeGenerationRequest,
   SwayCodeGenerationResponse,
+  RateLimitError,
 } from "../../../services/aiService";
 import { useAIService } from "./useAIService";
 
@@ -18,9 +19,16 @@ export interface UseAIGenerationReturn {
   isAvailable: boolean;
 }
 
-export function useAIGeneration(): UseAIGenerationReturn {
+export interface UseAIGenerationOptions {
+  onRateLimitError?: (error: RateLimitError) => void;
+}
+
+export function useAIGeneration(options: UseAIGenerationOptions = {}): UseAIGenerationReturn {
   const { state, execute, clearResult, isAvailable } = useAIService(
     aiService.generateSwayCode.bind(aiService),
+    {
+      onRateLimitError: options.onRateLimitError,
+    },
   );
 
   const transformedState: AIGenerationState = {

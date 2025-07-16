@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCopyToClipboard } from "../../../hooks/useCopyToClipboard";
 import {
   Dialog,
@@ -22,6 +22,8 @@ import { useAIGeneration } from "../hooks/useAIGeneration";
 import { SwayCodeGenerationRequest } from "../../../services/aiService";
 import { MarkdownRenderer } from "./MarkdownRenderer";
 import { removeCodeBlocks } from "../../../utils/aiHelpers";
+import { RateLimitDisplay } from "./RateLimitDisplay";
+import { useRateLimitStatus } from "../hooks/useRateLimitStatus";
 
 const StyledDialog = styled(Dialog)(() => ({
   "& .MuiPaper-root": {
@@ -67,9 +69,21 @@ export function AIGenerationDialog({
   onClose,
   onCodeGenerated,
 }: AIGenerationDialogProps) {
-  const { state, generateCode, clearResult, isAvailable } = useAIGeneration();
+  const { status: rateLimitStatus, fetchStatus: fetchRateLimitStatus, updateStatusAfterError } = useRateLimitStatus();
+  const { state, generateCode, clearResult, isAvailable } = useAIGeneration({
+    onRateLimitError: (error) => {
+      updateStatusAfterError(error);
+    }
+  });
   const [prompt, setPrompt] = useState("");
   const { copied, copyToClipboard, resetCopied } = useCopyToClipboard();
+
+  // Fetch rate limit status when modal opens
+  useEffect(() => {
+    if (open) {
+      fetchRateLimitStatus();
+    }
+  }, [open, fetchRateLimitStatus]);
 
   const handleGenerate = async () => {
     if (!prompt.trim()) return;
@@ -79,6 +93,8 @@ export function AIGenerationDialog({
     };
 
     await generateCode(request);
+    // Refresh rate limit status after making a request
+    await fetchRateLimitStatus();
   };
 
   const handleCopyCode = async () => {
@@ -139,7 +155,10 @@ export function AIGenerationDialog({
       <DialogContent>
         <Box display="flex" flexDirection="column" gap={3}>
           {/* Input Form */}
-          <Box>
+          <Box sx={{ position: 'relative' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 1 }}>
+              <RateLimitDisplay status={rateLimitStatus} />
+            </Box>
             <TextField
               fullWidth
               multiline
@@ -148,7 +167,7 @@ export function AIGenerationDialog({
               placeholder="e.g., Create a token contract with minting functionality and transfer capabilities"
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              disabled={isGenerating}
+              disabled={isGenerating || (rateLimitStatus?.requestsRemaining === 0)}
               variant="outlined"
             />
           </Box>
@@ -240,13 +259,13 @@ export function AIGenerationDialog({
         {!hasResult && (
           <GenerateButton
             onClick={handleGenerate}
-            disabled={!prompt.trim() || isGenerating}
+            disabled={!prompt.trim() || isGenerating || (rateLimitStatus?.requestsRemaining === 0)}
             startIcon={
               isGenerating ? <CircularProgress size={16} /> : <AutoAwesome />
             }
             variant="contained"
           >
-            Generate Contract
+            {rateLimitStatus?.requestsRemaining === 0 ? 'Limit Reached' : 'Generate Contract'}
           </GenerateButton>
         )}
 

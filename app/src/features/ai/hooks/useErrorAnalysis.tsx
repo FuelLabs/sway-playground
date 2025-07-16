@@ -3,6 +3,7 @@ import {
   aiService,
   ErrorAnalysisRequest,
   ErrorAnalysisResponse,
+  RateLimitError,
 } from "../../../services/aiService";
 import { useAIService } from "./useAIService";
 
@@ -20,8 +21,13 @@ export interface UseErrorAnalysisReturn {
   isAvailable: boolean;
 }
 
+export interface UseErrorAnalysisOptions {
+  onRateLimitError?: (error: RateLimitError) => void;
+}
+
 export function useErrorAnalysis(
   onCodeFixed?: (code: string) => void,
+  options: UseErrorAnalysisOptions = {},
 ): UseErrorAnalysisReturn {
   const { state, execute, apply, clearResult, isAvailable } = useAIService(
     aiService.analyzeError.bind(aiService),
@@ -31,6 +37,7 @@ export function useErrorAnalysis(
           onCodeFixed(result.fixedCode);
         }
       },
+      onRateLimitError: options.onRateLimitError,
     },
   );
 

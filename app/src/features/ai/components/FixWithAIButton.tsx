@@ -22,6 +22,7 @@ import { useErrorAnalysis } from "../hooks/useErrorAnalysis";
 import { ErrorAnalysisRequest } from "../../../services/aiService";
 import { MarkdownRenderer } from "./MarkdownRenderer";
 import { removeCodeBlocks } from "../../../utils/aiHelpers";
+import { useRateLimitStatus } from "../hooks/useRateLimitStatus";
 
 export interface FixWithAIButtonProps {
   errorMessage: string;
@@ -38,11 +39,16 @@ export function FixWithAIButton({
 }: FixWithAIButtonProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const { copied, copyToClipboard, resetCopied } = useCopyToClipboard();
+  const { status: rateLimitStatus, fetchStatus: fetchRateLimitStatus, updateStatusAfterError } = useRateLimitStatus();
 
   const { state, analyzeError, applyFix, clearResult, isAvailable } =
     useErrorAnalysis((fixedCode: string) => {
       onCodeFixed(fixedCode);
       setDialogOpen(false);
+    }, {
+      onRateLimitError: (error) => {
+        updateStatusAfterError(error);
+      }
     });
 
   const handleFixClick = async () => {
@@ -91,17 +97,32 @@ export function FixWithAIButton({
 
   return (
     <>
-      <Button
-        size="small"
-        onClick={handleFixClick}
-        disabled={disabled || !errorMessage.trim()}
-        startIcon={<AutoFixHigh />}
-        variant="contained"
-        color="error"
-        sx={{ ml: 1 }}
-      >
-        Fix with AI
-      </Button>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, ml: 1 }}>
+        <Button
+          size="small"
+          onClick={handleFixClick}
+          disabled={disabled || !errorMessage.trim() || (rateLimitStatus?.requestsRemaining === 0)}
+          startIcon={<AutoFixHigh />}
+          variant="contained"
+          color="error"
+        >
+          {rateLimitStatus?.requestsRemaining === 0 ? 'EXHAUSTED' : 'Fix with AI'}
+        </Button>
+        {rateLimitStatus && (
+          <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem' }}>
+            {rateLimitStatus.requestsRemaining === 0 && rateLimitStatus.resetTime
+              ? `(resets ${new Date(rateLimitStatus.resetTime).toLocaleString(undefined, {
+                  hour: 'numeric',
+                  minute: '2-digit',
+                  hour12: true,
+                  month: 'short',
+                  day: 'numeric'
+                })})`
+              : `(${rateLimitStatus.requestsRemaining} calls remaining today)`
+            }
+          </Typography>
+        )}
+      </Box>
 
       <Dialog
         open={dialogOpen}
