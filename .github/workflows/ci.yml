@@ -189,10 +189,6 @@ jobs:
             -e RATE_LIMIT_REQUESTS_PER_DAY=10 \
             ${{ env.LOCAL_REGISTRY }}/${{ env.LOCAL_TAG }}
 
-      - name: Wait for service to be ready
-        run: |
-          timeout 60 bash -c 'until curl -f http://localhost:8080/health; do sleep 2; done'
-
       - name: NPM build and test
         env:
           CI: true
@@ -201,6 +197,10 @@ jobs:
           npm ci
           npm run build
           npm run test
+      
+      - name: Wait for service to be ready
+        run: |
+          timeout 60 bash -c 'until curl -f http://localhost:8080/health; do sleep 2; done'
 
       - name: Run E2E Tests
         if: github.ref == 'refs/heads/master' || github.event_name == 'pull_request'
