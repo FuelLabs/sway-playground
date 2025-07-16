@@ -137,3 +137,23 @@ pub struct ErrorAnalysisResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fixed_code: Option<String>,
 }
+
+/// Rate limit status information.
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct RateLimitStatus {
+    pub requests_remaining: u32,
+    pub requests_limit: u32,
+    pub reset_time: Option<chrono::DateTime<chrono::Utc>>,
+    pub window_duration_seconds: u64,
+}
+
+/// Enhanced error response with rate limit information.
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct RateLimitErrorResponse {
+    pub error: String,
+    pub requests_limit: u32,
+    pub reset_time: chrono::DateTime<chrono::Utc>,
+    pub retry_after_seconds: u64,
+}
