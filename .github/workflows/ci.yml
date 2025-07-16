@@ -196,6 +196,62 @@ jobs:
           npm run build
           npm run test
 
+  ai-e2e-tests:
+    if: github.ref == 'refs/heads/master' || github.event_name == 'pull_request'
+    needs: cancel-previous-runs
+    runs-on: ubuntu-latest
+    # Local docker image registry
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
+    env:
+      LOCAL_REGISTRY: localhost:5000
+      LOCAL_TAG: sway-playground:local
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          driver-opts: network=host
+
+      - name: Log in to the local registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.LOCAL_REGISTRY }}
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build image and push to local registry
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: deployment/Dockerfile
+          push: true
+          tags: ${{ env.LOCAL_REGISTRY }}/${{ env.LOCAL_TAG }}
+
+      - name: Run the service in docker
+        run: |
+          docker run -d -p 8080:8080 \
+            -e GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }} \
+            -e RATE_LIMIT_REQUESTS_PER_DAY=10 \
+            ${{ env.LOCAL_REGISTRY }}/${{ env.LOCAL_TAG }}
+
+      - name: Wait for service to be ready
+        run: |
+          timeout 60 bash -c 'until curl -f http://localhost:8080/health; do sleep 2; done'
+
+      - name: Run E2E Tests
+        env:
+          REACT_APP_LOCAL_SERVER: true
+        run: |
+          cd app
+          npm ci
+          npm run test:ai
+
   deploy:
     if: github.ref == 'refs/heads/master'
     needs:
