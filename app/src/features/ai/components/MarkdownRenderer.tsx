@@ -3,12 +3,12 @@ import ReactMarkdown from "react-markdown";
 import { Box, Typography, Paper } from "@mui/material";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vs } from "react-syntax-highlighter/dist/esm/styles/prism";
+import type { Components } from "react-markdown";
 
-interface MarkdownComponentProps {
-  children?: React.ReactNode;
+interface CodeProps {
   inline?: boolean;
   className?: string;
-  [key: string]: unknown;
+  children?: React.ReactNode;
 }
 
 interface MarkdownRendererProps {
@@ -16,8 +16,8 @@ interface MarkdownRendererProps {
   borderColor?: string;
 }
 
-const markdownComponents = {
-  code: ({ inline, className, children, ...props }: MarkdownComponentProps) => {
+const markdownComponents: Components = {
+  code: ({ inline, className, children }: CodeProps) => {
     const match = /language-(\w+)/.exec(className || "");
     return !inline && match ? (
       <SyntaxHighlighter
@@ -25,7 +25,6 @@ const markdownComponents = {
         language={match[1]}
         PreTag="div"
         customStyle={{ margin: "1em 0", borderRadius: "8px" }}
-        {...props}
       >
         {String(children).replace(/\n$/, "")}
       </SyntaxHighlighter>
@@ -42,18 +41,17 @@ const markdownComponents = {
           fontWeight: 600,
           display: "inline",
         }}
-        {...props}
       >
         {children}
       </Box>
     );
   },
-  p: ({ children }: MarkdownComponentProps) => (
+  p: ({ children }) => (
     <Typography component="p" variant="body2" sx={{ mb: 1, lineHeight: 1.6 }}>
       {children}
     </Typography>
   ),
-  h1: ({ children }: MarkdownComponentProps) => (
+  h1: ({ children }) => (
     <Typography
       component="h1"
       variant="h5"
@@ -62,7 +60,7 @@ const markdownComponents = {
       {children}
     </Typography>
   ),
-  h2: ({ children }: MarkdownComponentProps) => (
+  h2: ({ children }) => (
     <Typography
       component="h2"
       variant="h6"
@@ -71,7 +69,7 @@ const markdownComponents = {
       {children}
     </Typography>
   ),
-  h3: ({ children }: MarkdownComponentProps) => (
+  h3: ({ children }) => (
     <Typography
       component="h3"
       variant="subtitle1"
@@ -80,17 +78,17 @@ const markdownComponents = {
       {children}
     </Typography>
   ),
-  ul: ({ children }: MarkdownComponentProps) => (
+  ul: ({ children }) => (
     <Box component="ul" sx={{ pl: 3, mb: 1 }}>
       {children}
     </Box>
   ),
-  ol: ({ children }: MarkdownComponentProps) => (
+  ol: ({ children }) => (
     <Box component="ol" sx={{ pl: 3, mb: 1 }}>
       {children}
     </Box>
   ),
-  li: ({ children }: MarkdownComponentProps) => (
+  li: ({ children }) => (
     <Typography component="li" variant="body2" sx={{ mb: 0.5 }}>
       {children}
     </Typography>
