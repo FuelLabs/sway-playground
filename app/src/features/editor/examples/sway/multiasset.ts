@@ -1,9 +1,9 @@
 export const EXAMPLE_SWAY_CONTRACT_MULTIASSET = `// ERC1155 equivalent in Sway.
 contract;
 
-use standards::src5::{AccessError, SRC5, State};
-use standards::src20::{SetDecimalsEvent, SetNameEvent, SetSymbolEvent, SRC20, TotalSupplyEvent};
-use standards::src3::SRC3;
+use src5::{AccessError, SRC5, State};
+use src20::{SetDecimalsEvent, SetNameEvent, SetSymbolEvent, SRC20, TotalSupplyEvent};
+use src3::SRC3;
 use std::{
     asset::{
         burn,
