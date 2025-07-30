@@ -47,14 +47,12 @@ pub fn build_and_destroy_project(
     // If the project compiled successfully, read the ABI and BIN files.
     if output.status.success() {
         let abi = read_to_string(format!(
-            "projects/{}/out/debug/swaypad-abi.json",
-            project_name
+            "projects/{project_name}/out/debug/swaypad-abi.json"
         ))
         .expect("Should have been able to read the file");
-        let bin = read_file_contents(format!("projects/{}/out/debug/swaypad.bin", project_name));
+        let bin = read_file_contents(format!("projects/{project_name}/out/debug/swaypad.bin"));
         let storage_slots = read_file_contents(format!(
-            "projects/{}/out/debug/swaypad-storage_slots.json",
-            project_name
+            "projects/{project_name}/out/debug/swaypad-storage_slots.json"
         ));
 
         // Remove the project directory and contents.

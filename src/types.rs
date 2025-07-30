@@ -25,7 +25,7 @@ impl fmt::Display for Toolchain {
             Toolchain::Mainnet => "mainnet",
         };
 
-        write!(formatter, "{}", s)
+        write!(formatter, "{s}")
     }
 }
 
