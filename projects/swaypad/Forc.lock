@@ -1,9 +1,238 @@
 [[package]]
+name = "admin"
+version = "0.26.1"
+source = "registry+admin?0.26.1#QmTg3UpUh3RTZ9LWJX94ekCracGkmEP9QTrouTfUnunRuo!"
+dependencies = [
+    "ownership registry+ownership?0.26.0#QmbVoNUrvCTyQTdE8ZP83XxTQQVzhrevfMqk1rAJAkMFVo!",
+    "src5 registry+src5?0.8.0#QmNRPZrPHFBiEAyWPU8gesdPsD2zb3cMKwEgxJwV1ZEjyD!",
+    "std",
+]
+
+[[package]]
+name = "asset"
+version = "0.26.1"
+source = "registry+asset?0.26.1#QmRX3CYxadKPi2pz7aFNoHmTrEYK7TfBv3D8mzDmvcniAQ!"
+dependencies = [
+    "src20 registry+src20?0.8.0#QmSwYjybtdvSF3Ey9RncVUUaFaWsizSBNgAtY9JoyaAHvh!",
+    "src7 registry+src7?0.8.0#QmbDHPdbKzpRg31bxNNLHQ6pyreH2GjHiXjnR7aKoNC2Y5!",
+    "std",
+]
+
+[[package]]
+name = "big_int"
+version = "0.26.1"
+source = "registry+big_int?0.26.1#QmNgX5iDQcu6rQYKjyfy6fiKVP3CUqPPjNvNrELxTvSnmE!"
+dependencies = ["std"]
+
+[[package]]
+name = "bytecode"
+version = "0.26.1"
+source = "registry+bytecode?0.26.1#QmYA2woBH2KKMz1Fupir5PyqvWjBwqB6UQnJGQdVRvF28b!"
+dependencies = ["std"]
+
+[[package]]
+name = "merkle"
+version = "0.26.0"
+source = "registry+merkle?0.26.0#QmVPESeRGJvb5HBxhrMM8eBMqhYJCjibngvhGZsLfEQWwv!"
+dependencies = ["std"]
+
+[[package]]
+name = "merkle"
+version = "0.26.1"
+source = "registry+merkle?0.26.1#QmbrnpYio3sd6WjzDdpuc7iu8M9NLp9S8WMAshfnzJx9L7!"
+dependencies = ["std"]
+
+[[package]]
+name = "ownership"
+version = "0.26.0"
+source = "registry+ownership?0.26.0#QmbVoNUrvCTyQTdE8ZP83XxTQQVzhrevfMqk1rAJAkMFVo!"
+dependencies = [
+    "src5 registry+src5?0.8.0#QmNRPZrPHFBiEAyWPU8gesdPsD2zb3cMKwEgxJwV1ZEjyD!",
+    "std",
+]
+
+[[package]]
+name = "ownership"
+version = "0.26.1"
+source = "registry+ownership?0.26.1#QmcmRuXsD2ZaE74nZ5vGxc1QhYJhjQKMwho6ZfkYt1cs6Q!"
+dependencies = [
+    "src5 registry+src5?0.8.0#QmNRPZrPHFBiEAyWPU8gesdPsD2zb3cMKwEgxJwV1ZEjyD!",
+    "std",
+]
+
+[[package]]
+name = "pausable"
+version = "0.26.1"
+source = "registry+pausable?0.26.1#QmapdwdUETu3aWXa5xnjdsgqDWhh9WnGkYQcBi7UqfWsrL!"
+dependencies = ["std"]
+
+[[package]]
+name = "queue"
+version = "0.26.1"
+source = "registry+queue?0.26.1#QmUtXdcMtBULg6WjUwto7XTfAD5d1XY3rAuvNcpGsEyTse!"
+dependencies = ["std"]
+
+[[package]]
+name = "reentrancy"
+version = "0.26.1"
+source = "registry+reentrancy?0.26.1#QmSgL8w74XSe54aQH7ySQUA2Bc3abTNnN15jVrynRJrFRE!"
+dependencies = ["std"]
+
+[[package]]
+name = "signed_int"
+version = "0.26.1"
+source = "registry+signed_int?0.26.1#QmWB8r7jN9bE1sVUJzQoTCbsTXyL6qB55mSfeicd6EtoAo!"
+dependencies = ["std"]
+
+[[package]]
+name = "src10"
+version = "0.8.1"
+source = "registry+src10?0.8.1#QmQoWxV9GzikpETF53BmhvvjJ7Gtw5ikiXBsDAmFvgNJG5!"
+dependencies = ["std"]
+
+[[package]]
+name = "src11"
+version = "0.8.1"
+source = "registry+src11?0.8.1#QmXbhmSuE6dPVxWYZG6W11rNQdgrvNoT7QYMLcpTTiVnuC!"
+dependencies = ["std"]
+
+[[package]]
+name = "src12"
+version = "0.8.1"
+source = "registry+src12?0.8.1#QmQZwvkJatLtu6MrbDQXh4v1GGzJbKSdeEqPLhxAA1yoZk!"
+dependencies = ["std"]
+
+[[package]]
+name = "src14"
+version = "0.8.0"
+source = "registry+src14?0.8.0#QmQduNaJgjotgw2tz5KLv18PckFZP6zLH3Wzk7mqLfwgcu!"
+dependencies = [
+    "src5 registry+src5?0.8.0#QmNRPZrPHFBiEAyWPU8gesdPsD2zb3cMKwEgxJwV1ZEjyD!",
+    "std",
+]
+
+[[package]]
+name = "src14"
+version = "0.8.1"
+source = "registry+src14?0.8.1#QmVSGf3k13sfJCN2FQcTJAhXa8bmpdBRSbHWTXcuxoaAkt!"
+dependencies = [
+    "src5 registry+src5?0.8.0#QmNRPZrPHFBiEAyWPU8gesdPsD2zb3cMKwEgxJwV1ZEjyD!",
+    "std",
+]
+
+[[package]]
+name = "src15"
+version = "0.8.1"
+source = "registry+src15?0.8.1#Qme2PnwhzWBVp3FN5U8jAG5ot1b2Mbg6naWULw1QeerX5L!"
+dependencies = [
+    "src7 registry+src7?0.8.0#QmbDHPdbKzpRg31bxNNLHQ6pyreH2GjHiXjnR7aKoNC2Y5!",
+    "std",
+]
+
+[[package]]
+name = "src16"
+version = "0.8.1"
+source = "registry+src16?0.8.1#QmbsxTjJ6iNpBwX2VztTXAuRgApSQs7by1wjhZYX8BRmVU!"
+dependencies = ["std"]
+
+[[package]]
+name = "src17"
+version = "0.8.1"
+source = "registry+src17?0.8.1#QmXDCthSoywN5QxQTAF27drdaz5m7muzMBKhHHwE96AGuX!"
+dependencies = [
+    "merkle registry+merkle?0.26.0#QmVPESeRGJvb5HBxhrMM8eBMqhYJCjibngvhGZsLfEQWwv!",
+    "std",
+]
+
+[[package]]
+name = "src20"
+version = "0.8.0"
+source = "registry+src20?0.8.0#QmSwYjybtdvSF3Ey9RncVUUaFaWsizSBNgAtY9JoyaAHvh!"
+dependencies = ["std"]
+
+[[package]]
+name = "src20"
+version = "0.8.1"
+source = "registry+src20?0.8.1#QmeJqNZFcPCUgKDWRjeKHQhEraMHX9n5sr8S9Vkt4wmnV1!"
+dependencies = ["std"]
+
+[[package]]
+name = "src3"
+version = "0.8.1"
+source = "registry+src3?0.8.1#QmaRv83wVWP9UnUCtMMoJih9f8eCiA3k4MnH75m4zVZQ18!"
+dependencies = ["std"]
+
+[[package]]
+name = "src5"
+version = "0.8.0"
+source = "registry+src5?0.8.0#QmNRPZrPHFBiEAyWPU8gesdPsD2zb3cMKwEgxJwV1ZEjyD!"
+dependencies = ["std"]
+
+[[package]]
+name = "src5"
+version = "0.8.1"
+source = "registry+src5?0.8.1#QmcUKCMFWYYpGzqSxZFn3d97MhQ9RAiEMoQGWjVE2AmMFN!"
+dependencies = ["std"]
+
+[[package]]
+name = "src6"
+version = "0.8.1"
+source = "registry+src6?0.8.1#QmPe73uNLNf7SbK7am4aTTJagXjgAp3HuhHG38briWYPdq!"
+dependencies = ["std"]
+
+[[package]]
+name = "src7"
+version = "0.8.0"
+source = "registry+src7?0.8.0#QmbDHPdbKzpRg31bxNNLHQ6pyreH2GjHiXjnR7aKoNC2Y5!"
+dependencies = ["std"]
+
+[[package]]
+name = "src7"
+version = "0.8.1"
+source = "registry+src7?0.8.1#QmfGnm1jMVLTgG7NgE5vVC4j2ngvbhgbqct7bAYaQjSAsq!"
+dependencies = ["std"]
+
+[[package]]
 name = "std"
-version = "0.68.9"
-source = "registry+std?0.68.9#QmUaBxMs2JvY1bXgRCdeCsG3o6TN82ftRgv4Tq7ytqUGUT!"
+version = "0.69.1"
+source = "registry+std?0.69.1#QmbPunScay4xpfHKpxQ71dFKXSiyJuPP8P8YhgX5Dkmzm9!"
 
 [[package]]
 name = "swaypad"
 source = "member"
-dependencies = ["std"]
+dependencies = [
+    "admin",
+    "asset",
+    "big_int",
+    "bytecode",
+    "merkle registry+merkle?0.26.1#QmbrnpYio3sd6WjzDdpuc7iu8M9NLp9S8WMAshfnzJx9L7!",
+    "ownership registry+ownership?0.26.1#QmcmRuXsD2ZaE74nZ5vGxc1QhYJhjQKMwho6ZfkYt1cs6Q!",
+    "pausable",
+    "queue",
+    "reentrancy",
+    "signed_int",
+    "src10",
+    "src11",
+    "src12",
+    "src14 registry+src14?0.8.1#QmVSGf3k13sfJCN2FQcTJAhXa8bmpdBRSbHWTXcuxoaAkt!",
+    "src15",
+    "src16",
+    "src17",
+    "src20 registry+src20?0.8.1#QmeJqNZFcPCUgKDWRjeKHQhEraMHX9n5sr8S9Vkt4wmnV1!",
+    "src3",
+    "src5 registry+src5?0.8.1#QmcUKCMFWYYpGzqSxZFn3d97MhQ9RAiEMoQGWjVE2AmMFN!",
+    "src6",
+    "src7 registry+src7?0.8.1#QmfGnm1jMVLTgG7NgE5vVC4j2ngvbhgbqct7bAYaQjSAsq!",
+    "std",
+    "upgradability",
+]
+
+[[package]]
+name = "upgradability"
+version = "0.26.1"
+source = "registry+upgradability?0.26.1#QmdpNGKga6FPGNsbAPuPAbPJwUqrPBz2aEBjBJie2BPkWt!"
+dependencies = [
+    "src14 registry+src14?0.8.0#QmQduNaJgjotgw2tz5KLv18PckFZP6zLH3Wzk7mqLfwgcu!",
+    "src5 registry+src5?0.8.0#QmNRPZrPHFBiEAyWPU8gesdPsD2zb3cMKwEgxJwV1ZEjyD!",
+    "std",
+]
