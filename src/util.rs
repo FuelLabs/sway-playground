@@ -30,7 +30,7 @@ pub fn read_file_contents(file_name: String) -> Vec<u8> {
         return String::from("Not Found!").into();
     }
 
-    // Setup an empty vecotr of file content.
+    // Setup an empty vector of file content.
     let mut file_content = Vec::new();
 
     // Open the file.
