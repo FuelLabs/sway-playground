@@ -3,21 +3,26 @@
 #[macro_use]
 extern crate rocket;
 
+mod ai;
 mod compilation;
 mod cors;
 mod error;
 mod gist;
+mod rate_limiter;
 mod transpilation;
 mod types;
 mod util;
 
+use crate::ai::AIService;
 use crate::compilation::build_and_destroy_project;
 use crate::cors::Cors;
 use crate::error::ApiResult;
 use crate::gist::GistClient;
+use crate::rate_limiter::{ClientIp, RateLimitConfig, RateLimitGuard, RateLimiter};
 use crate::types::{
-    CompileRequest, CompileResponse, GistResponse, Language, NewGistRequest, NewGistResponse,
-    TranspileRequest,
+    CompileRequest, CompileResponse, ErrorAnalysisRequest, ErrorAnalysisResponse, GistResponse,
+    Language, NewGistRequest, NewGistResponse, RateLimitStatus, SwayCodeGenerationRequest,
+    SwayCodeGenerationResponse, TranspileRequest,
 };
 use crate::{transpilation::solidity_to_sway, types::TranspileResponse};
 use rocket::serde::json::Json;
@@ -57,6 +62,38 @@ async fn get_gist(id: String, gist: &State<GistClient>) -> ApiResult<GistRespons
     Ok(Json(gist_response))
 }
 
+/// The endpoint to generate Sway code using AI.
+#[post("/ai/generate", data = "<request>")]
+async fn generate_sway_code(
+    request: Json<SwayCodeGenerationRequest>,
+    ai_service: &State<AIService>,
+    _rate_limit: RateLimitGuard,
+) -> ApiResult<SwayCodeGenerationResponse> {
+    let response = ai_service.generate_sway_code(request.into_inner()).await?;
+    Ok(Json(response))
+}
+
+/// The endpoint to analyze compilation errors using AI.
+#[post("/ai/analyze-error", data = "<request>")]
+async fn analyze_error(
+    request: Json<ErrorAnalysisRequest>,
+    ai_service: &State<AIService>,
+    _rate_limit: RateLimitGuard,
+) -> ApiResult<ErrorAnalysisResponse> {
+    let response = ai_service.analyze_error(request.into_inner()).await?;
+    Ok(Json(response))
+}
+
+/// The endpoint to get rate limit status.
+#[get("/ai/rate-limit-status")]
+fn get_rate_limit_status(
+    rate_limiter: &State<RateLimiter>,
+    client_ip: ClientIp,
+) -> ApiResult<RateLimitStatus> {
+    let status = rate_limiter.get_rate_limit_status(client_ip.0);
+    Ok(Json(status))
+}
+
 /// Catches all OPTION requests in order to get the CORS related Fairing triggered.
 #[options("/<_..>")]
 fn all_options() {
@@ -72,11 +109,29 @@ fn health() -> String {
 // Launch the rocket server.
 #[launch]
 fn rocket() -> _ {
+    // Load environment variables from .env file
+    dotenv::dotenv().ok();
+
+    let ai_service = AIService::new().expect("Failed to initialize AI service");
+    let rate_limiter = RateLimiter::new(RateLimitConfig::from_env());
+
     rocket::build()
         .manage(GistClient::default())
+        .manage(ai_service)
+        .manage(rate_limiter)
         .attach(Cors)
         .mount(
             "/",
-            routes![compile, transpile, new_gist, get_gist, all_options, health],
+            routes![
+                compile,
+                transpile,
+                new_gist,
+                get_gist,
+                generate_sway_code,
+                analyze_error,
+                get_rate_limit_status,
+                all_options,
+                health
+            ],
         )
 }
