@@ -152,7 +152,6 @@ jobs:
           npm run format-check
 
   frontend-build-and-test:
-    if: github.ref != 'refs/heads/master'
     needs: cancel-previous-runs
     runs-on: ubuntu-latest
     # Local docker image registry
@@ -190,7 +189,10 @@ jobs:
 
       - name: Run the service in docker
         run: |
-          docker run -d -p 8080:8080 ${{ env.LOCAL_REGISTRY }}/${{ env.LOCAL_TAG }}
+          docker run -d -p 8080:8080 \
+            -e GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }} \
+            -e RATE_LIMIT_REQUESTS_PER_DAY=10 \
+            ${{ env.LOCAL_REGISTRY }}/${{ env.LOCAL_TAG }}
 
       - name: NPM build and test
         env:
@@ -200,6 +202,18 @@ jobs:
           npm ci
           npm run build
           npm run test
+      
+      - name: Wait for service to be ready
+        run: |
+          timeout 60 bash -c 'until curl -f http://localhost:8080/health; do sleep 2; done'
+
+      - name: Run E2E Tests
+        if: github.ref == 'refs/heads/master' || github.event_name == 'pull_request'
+        env:
+          REACT_APP_LOCAL_SERVER: true
+        run: |
+          cd app
+          npm run test:ai
 
   deploy:
     if: github.ref == 'refs/heads/master'

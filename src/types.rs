@@ -104,3 +104,56 @@ pub struct GistResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
 }
+
+/// The AI Sway code generation request.
+#[derive(Deserialize)]
+pub struct SwayCodeGenerationRequest {
+    pub prompt: String,
+}
+
+/// The response to an AI Sway code generation request.
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SwayCodeGenerationResponse {
+    pub code: String,
+    pub explanation: String,
+    pub suggestions: Vec<String>,
+}
+
+/// The AI error analysis request.
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ErrorAnalysisRequest {
+    pub error_message: String,
+    pub source_code: String,
+}
+
+/// The response to an AI error analysis request.
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ErrorAnalysisResponse {
+    pub analysis: String,
+    pub suggestions: Vec<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fixed_code: Option<String>,
+}
+
+/// Rate limit status information.
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct RateLimitStatus {
+    pub requests_remaining: u32,
+    pub requests_limit: u32,
+    pub reset_time: Option<chrono::DateTime<chrono::Utc>>,
+    pub window_duration_seconds: u64,
+}
+
+/// Enhanced error response with rate limit information.
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct RateLimitErrorResponse {
+    pub error: String,
+    pub requests_limit: u32,
+    pub reset_time: chrono::DateTime<chrono::Utc>,
+    pub retry_after_seconds: u64,
+}
