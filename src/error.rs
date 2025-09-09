@@ -1,17 +1,8 @@
-use rocket::{
-    http::Status,
-    response::Responder,
-    serde::{json::Json, Serialize},
-    Request,
-};
+use rocket::{http::Status, response::Responder, serde::json::Json, Request};
 use thiserror::Error;
 
 /// A wrapper for API responses that can return errors.
 pub type ApiResult<T> = Result<Json<T>, ApiError>;
-
-/// An empty response.
-#[derive(Serialize)]
-pub struct EmptyResponse;
 
 #[derive(Error, Debug)]
 pub enum ApiError {
