@@ -24,7 +24,7 @@ RUN cargo install --git https://github.com/FuelLabs/charcoal.git --rev e69a6ffaf
 
 ENV CARGO_NET_GIT_FETCH_WITH_CLI=true
 COPY --from=planner /build/recipe.json recipe.json
-# Build our project dependecies, not our application!
+# Build our project dependencies, not our application!
 RUN cargo chef cook --recipe-path recipe.json
 # Up to this point, if our dependency tree stays the same,
 # all layers should be cached.

@@ -18,7 +18,7 @@ export function ResponseCard({
   const formattedResponse = useMemo(() => {
     if (!response) return "The response will appear here.";
     if (response instanceof Error) return response.toString();
-    if (!response.length) return "Waiting for reponse...";
+    if (!response.length) return "Waiting for response...";
 
     switch (outputType) {
       case "number": {
