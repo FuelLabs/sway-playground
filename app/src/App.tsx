@@ -128,7 +128,7 @@ function App() {
         <Copyable
           href
           value={permalink}
-          tooltip="permalink to your code"
+          tooltip="permalink to your cde"
           label="Permalink to Playground"
         />,
         <Copyable
