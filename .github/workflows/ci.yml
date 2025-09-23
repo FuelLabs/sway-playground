@@ -87,6 +87,35 @@ jobs:
           command: test
           args: --verbose --all --all-features
 
+  integration-test-examples:
+    needs: cancel-previous-runs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Install Fuel toolchain
+        run: |
+          curl -fsSL https://install.fuel.network/ | sh -s -- --no-modify-path
+          echo "$HOME/.fuelup/bin" >> $GITHUB_PATH
+
+      - name: Install fuel toolchains
+        run: |
+          source ~/.bashrc
+          fuelup toolchain install latest
+          fuelup toolchain install nightly
+          fuelup toolchain install testnet
+          fuelup toolchain install mainnet
+          fuelup default testnet
+
+      - name: Run integration tests for examples
+        run: |
+          source ~/.bashrc
+          ./scripts/test-examples.sh
+
   build-and-publish-image:
     if: github.ref == 'refs/heads/master' || (github.event_name == 'workflow_dispatch' && github.event.inputs.build_image == 'true')
     needs:
@@ -94,6 +123,7 @@ jobs:
       - cargo-clippy
       - cargo-check
       - cargo-test
+      - integration-test-examples
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
