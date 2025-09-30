@@ -13,7 +13,7 @@ use std::{
 const TMP: &str = "tmp";
 const FILE_NAME: &str = "main.sol";
 
-/// Transpile the given Solitiy contract to Sway.
+/// Transpile the given Solidity contract to Sway.
 pub fn solidity_to_sway(contract: String) -> Result<TranspileResponse, ApiError> {
     if contract.is_empty() {
         return Ok(TranspileResponse {

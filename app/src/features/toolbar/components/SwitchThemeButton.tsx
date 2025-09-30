@@ -14,7 +14,7 @@ function SwitchThemeButton() {
 
   return (
     <IconButton
-      aria-label="swithThemes"
+      aria-label="switchThemes"
       onClick={handleChange}
       sx={{
         marginRight: "15px",
