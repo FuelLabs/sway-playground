@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import useTheme from "../context/theme";
@@ -11,6 +11,7 @@ export interface SecondaryButtonProps {
   tooltip?: string;
   style?: React.CSSProperties;
   header?: boolean;
+  live?: boolean;
 }
 function SecondaryButton({
   onClick,
@@ -20,6 +21,7 @@ function SecondaryButton({
   tooltip,
   style,
   header,
+  live = false,
 }: SecondaryButtonProps) {
   if (header) {
     style = {
@@ -32,6 +34,12 @@ function SecondaryButton({
   }
 
   const { themeColor } = useTheme();
+
+  useEffect(() => {
+    if (live) {
+      onClick();
+    }
+  }, [live, onClick]);
 
   return (
     <Tooltip title={tooltip}>
