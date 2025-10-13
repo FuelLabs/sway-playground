@@ -49,6 +49,12 @@ function SecondaryButton({
               borderColor: themeColor("disabled1"),
               color: themeColor("disabled1"),
             },
+            "@media (max-width: 1440px)": {
+              marginRight: "5px",
+              marginBottom: "5px",
+              height: "35px",
+              minWidth: "90px",
+            },
           }}
           variant="outlined"
           onClick={onClick}
