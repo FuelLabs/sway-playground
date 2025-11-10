@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -11,19 +11,28 @@ export interface CopyableProps {
   href?: boolean;
 }
 
-async function handleCopy(value: string) {
+async function handleCopy(value: string, onSuccess: () => void) {
   await navigator.clipboard.writeText(value);
+  onSuccess();
 }
 
 function Copyable({ value, label, tooltip, href }: CopyableProps) {
   const { themeColor } = useTheme();
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyClick = async () => {
+    await handleCopy(value, () => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
 
   return (
     <div
       style={{ cursor: "pointer", color: themeColor("gray1") }}
-      onClick={() => handleCopy(value)}
+      onClick={handleCopyClick}
     >
-      <Tooltip title={`Click to copy ${tooltip}`}>
+      <Tooltip title={copied ? "Copied!" : `Click to copy ${tooltip}`}>
         <span>
           {href ? (
             <a
