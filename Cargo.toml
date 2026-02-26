@@ -14,3 +14,8 @@ rocket = { version = "0.5.0-rc.2", features = ["tls", "json"] }
 serde = { version = "1.0", features = ["derive"] }
 octocrab = "0.38.0"
 thiserror = "1.0.60"
+gemini-rust = "0.1.0"
+reqwest = { version = "0.11", features = ["json"] }
+dotenv = "0.15"
+dashmap = "5.5"
+chrono = { version = "0.4", features = ["serde"] }

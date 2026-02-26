@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 import PlayArrow from "@mui/icons-material/PlayArrow";
 import OpenInNew from "@mui/icons-material/OpenInNew";
+import AutoAwesome from "@mui/icons-material/AutoAwesome";
 import { DeployState } from "../../../utils/types";
 import { DeploymentButton } from "./DeploymentButton";
 import CompileButton from "./CompileButton";
@@ -15,6 +16,7 @@ import SwitchThemeButton from "./SwitchThemeButton";
 import { useConnectIfNotAlready } from "../hooks/useConnectIfNotAlready";
 import { useDisconnect } from "@fuels/react";
 import { useNavigate } from "react-router-dom";
+import { aiService } from "../../../services/aiService";
 
 export interface ActionToolbarProps {
   deployState: DeployState;
@@ -28,6 +30,7 @@ export interface ActionToolbarProps {
   showSolidity: boolean;
   setShowSolidity: (open: boolean) => void;
   updateLog: (entry: string) => void;
+  onAIAssistClick?: () => void;
 }
 
 function ActionToolbar({
@@ -42,6 +45,7 @@ function ActionToolbar({
   showSolidity,
   setShowSolidity,
   updateLog,
+  onAIAssistClick,
 }: ActionToolbarProps) {
   const isMobile = useIsMobile();
   const { isConnected } = useConnectIfNotAlready();
@@ -107,6 +111,15 @@ function ActionToolbar({
         text="ABI"
         tooltip="Query an already-deployed contract using the ABI"
       />
+      {aiService.isAvailable() && onAIAssistClick && !isMobile && (
+        <SecondaryButton
+          header={true}
+          onClick={onAIAssistClick}
+          text="AI ASSIST"
+          tooltip="Generate Sway contracts with AI assistance"
+          endIcon={<AutoAwesome style={{ fontSize: "16px" }} />}
+        />
+      )}
       <SecondaryButton
         header={true}
         onClick={onDocsClick}
