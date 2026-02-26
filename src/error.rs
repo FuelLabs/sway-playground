@@ -11,10 +11,6 @@ use thiserror::Error;
 /// A wrapper for API responses that can return errors.
 pub type ApiResult<T> = Result<Json<T>, ApiError>;
 
-/// An empty response.
-#[derive(Serialize)]
-pub struct EmptyResponse;
-
 #[derive(Error, Debug)]
 pub enum ApiError {
     #[error("Filesystem error: {0}")]

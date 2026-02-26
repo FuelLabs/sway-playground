@@ -36,8 +36,6 @@ spec:
           envFrom:
             - secretRef:
                 name: sway-playground
-            - configMapRef:
-                name: app-sway-playground
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
