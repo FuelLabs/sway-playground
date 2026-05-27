@@ -116,7 +116,10 @@ jobs:
           ./scripts/test-examples.sh
 
   build-and-publish-image:
-    if: github.ref == 'refs/heads/master' || (github.event_name == 'workflow_dispatch' && github.event.inputs.build_image == 'true')
+    if: |
+      github.ref == 'refs/heads/master' ||
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.build_image == 'true')
     needs:
       - cargo-fmt-check
       - cargo-clippy
@@ -167,47 +170,33 @@ jobs:
           npm run format-check
 
   frontend-build-and-test:
-    if: github.ref != 'refs/heads/master'
-    needs: cancel-previous-runs
+    if: github.event_name == 'pull_request'
+    needs:
+      - build-and-publish-image
     runs-on: ubuntu-latest
-    # Local docker image registry
-    services:
-      registry:
-        image: registry:2
-        ports:
-          - 5000:5000
-    env:
-      LOCAL_REGISTRY: localhost:5000
-      LOCAL_TAG: sway-playground:local
+    permissions:
+      contents: read
+      packages: read
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
         with:
-          driver-opts: network=host
-
-      - name: Log in to the local registry
-        uses: docker/login-action@v1
-        with:
-          registry: ${{ env.LOCAL_REGISTRY }}
+          registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build image and push to local registry
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: deployment/Dockerfile
-          push: true
-          tags: ${{ env.LOCAL_REGISTRY }}/${{ env.LOCAL_TAG }}
-
-      - name: Run the service in docker
+      - name: Pull and run image from shared workflow build
+        env:
+          IMAGE: ${{ needs.build-and-publish-image.outputs.image }}
+          DIGEST: ${{ needs.build-and-publish-image.outputs.digest }}
         run: |
-          docker run -d -p 8080:8080 ${{ env.LOCAL_REGISTRY }}/${{ env.LOCAL_TAG }}
+          docker pull --platform linux/amd64 "${IMAGE}@${DIGEST}"
+          docker run -d -p 8080:8080 "${IMAGE}@${DIGEST}"
 
       - name: NPM build and test
+        uses: actions/checkout@v2
+
+      - name: Run frontend build and tests
         env:
           CI: true
         run: |
