@@ -13,7 +13,6 @@ on:
 env:
   CARGO_TERM_COLOR: always
   RUSTFLAGS: -D warnings
-  REGISTRY: ghcr.io
   RUST_VERSION: 1.70.0
   NODE_VERSION: '16'
 
@@ -117,49 +116,39 @@ jobs:
           ./scripts/test-examples.sh
 
   build-and-publish-image:
-    if: github.ref == 'refs/heads/master' || (github.event_name == 'workflow_dispatch' && github.event.inputs.build_image == 'true')
+    if: |
+      github.ref == 'refs/heads/master' ||
+      (github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository) ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.build_image == 'true')
     needs:
       - cargo-fmt-check
       - cargo-clippy
       - cargo-check
       - cargo-test
       - integration-test-examples
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: |
-            ghcr.io/fuellabs/sway-playground
-          tags: |
-            type=ref,event=branch
-            type=sha,prefix=
-            type=semver,pattern={{raw}}
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Log in to the ghcr.io registry
-        uses: docker/login-action@v1
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push the image to ghcr.io
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: deployment/Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    uses: FuelLabs/github-actions/.github/workflows/docker-build-push.yml@master
+    secrets:
+      REGISTRY_USERNAME: ${{ github.repository_owner }}
+      REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+    with:
+      auth-mode: registry-login
+      registry: ghcr.io
+      build-backend: native
+      platforms: linux/amd64,linux/arm64
+      runs-on-amd64: ubuntu-latest
+      runs-on-arm64: ubuntu-24.04-arm
+      dockerfile: deployment/Dockerfile
+      docker-context: .
+      image: ghcr.io/fuellabs/sway-playground
+      tags: |
+        type=ref,event=branch
+        type=sha,prefix=
+        type=semver,pattern={{raw}}
 
   eslint-check:
     needs: cancel-previous-runs
@@ -182,45 +171,31 @@ jobs:
           npm run format-check
 
   frontend-build-and-test:
-    if: github.ref != 'refs/heads/master'
-    needs: cancel-previous-runs
+    if: github.event_name == 'pull_request'
+    needs:
+      - build-and-publish-image
     runs-on: ubuntu-latest
-    # Local docker image registry
-    services:
-      registry:
-        image: registry:2
-        ports:
-          - 5000:5000
-    env:
-      LOCAL_REGISTRY: localhost:5000
-      LOCAL_TAG: sway-playground:local
+    permissions:
+      contents: read
+      packages: read
     steps:
-      - name: Checkout repository
+      - name: Check out repository
         uses: actions/checkout@v2
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
         with:
-          driver-opts: network=host
-
-      - name: Log in to the local registry
-        uses: docker/login-action@v1
-        with:
-          registry: ${{ env.LOCAL_REGISTRY }}
+          registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build image and push to local registry
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: deployment/Dockerfile
-          push: true
-          tags: ${{ env.LOCAL_REGISTRY }}/${{ env.LOCAL_TAG }}
-
-      - name: Run the service in docker
+      - name: Pull and run image from shared workflow build
+        env:
+          IMAGE: ${{ needs.build-and-publish-image.outputs.image }}
+          DIGEST: ${{ needs.build-and-publish-image.outputs.digest }}
         run: |
-          docker run -d -p 8080:8080 ${{ env.LOCAL_REGISTRY }}/${{ env.LOCAL_TAG }}
+          docker pull --platform linux/amd64 "${IMAGE}@${DIGEST}"
+          docker run -d -p 8080:8080 "${IMAGE}@${DIGEST}"
 
       - name: NPM build and test
         env:
