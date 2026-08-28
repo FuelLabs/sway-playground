@@ -5,6 +5,9 @@ license = "Apache-2.0"
 name = "swaypad"
 
 [dependencies]
+# Registry pins compatible with forc 0.72 (fuelup testnet/latest as of 2026-08-28).
+# Dropped: src16, src17, big_int — those 0.8.1/0.26.1 packages use
+# experimental_const_generics, which forc 0.72 rejects.
 src3 = "0.8.1"
 src5 = "0.8.1"
 src6 = "0.8.1"
@@ -14,12 +17,9 @@ src11 = "0.8.1"
 src12 = "0.8.1"
 src14 = "0.8.1"
 src15 = "0.8.1"
-src16 = "0.8.1"
-src17 = "0.8.1"
 src20 = "0.8.1"
 admin = "0.26.1"
 asset = "0.26.1"
-big_int = "0.26.1"
 bytecode = "0.26.1"
 merkle = "0.26.1"
 ownership = "0.26.1"

@@ -88,7 +88,7 @@ for example_b64 in $sway_examples; do
     echo "$code" > "$MAIN_SW_PATH"
 
     # Try to build the project
-    if (cd "$SWAYPAD_DIR" && forc build --silent); then
+    if (cd "$SWAYPAD_DIR" && forc build); then
         echo -e "${GREEN}✅ $name: BUILD SUCCESSFUL${NC}"
         passed_examples=$((passed_examples + 1))
     else
