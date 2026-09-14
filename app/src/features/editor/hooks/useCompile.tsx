@@ -18,12 +18,13 @@ function toResults(
   return [
     <div key={"bytecode"}>
       <b>Bytecode</b>:<br />
-      <CopyableHex hex={prefixedBytecode} tooltip="bytecode" />
+      <CopyableHex hex={prefixedBytecode} slice={true} tooltip="bytecode" />
       <br />
       <br />
     </div>,
     <div key={"abi"}>
       <b>ABI:</b>
+      <CopyableHex hex={abi} slice={false} tooltip="ABI" />
       <br />
       {abi}
     </div>,
