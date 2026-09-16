@@ -3,7 +3,6 @@ import LogView from "./features/editor/components/LogView";
 import { loadAbi, saveAbi, saveSwayCode } from "./utils/localStorage";
 import InteractionDrawer from "./features/interact/components/InteractionDrawer";
 import { useLog } from "./features/editor/hooks/useLog";
-import { Analytics } from "@vercel/analytics/react";
 import useTheme from "./context/theme";
 import AbiActionToolbar from "./features/toolbar/components/AbiActionToolbar";
 import AbiEditorView from "./features/editor/components/AbiEditorView";
@@ -71,7 +70,6 @@ function AbiApp() {
         contractId={contractId}
         updateLog={updateLog}
       />
-      <Analytics />
     </div>
   );
 }

@@ -17,7 +17,6 @@ import {
 } from "./features/editor/components/ToolchainDropdown";
 import { useTranspile } from "./features/editor/hooks/useTranspile";
 import EditorView from "./features/editor/components/EditorView";
-import { Analytics, track } from "@vercel/analytics/react";
 import { useGist } from "./features/editor/hooks/useGist";
 import { useSearchParams } from "react-router-dom";
 import Copyable from "./components/Copyable";
@@ -117,7 +116,6 @@ function App() {
   );
 
   const onShareClick = useCallback(async () => {
-    track("Share Click", { toolchain });
     const response = await newGist(swayCode, {
       contract: solidityCode,
       language: "solidity",
@@ -142,10 +140,8 @@ function App() {
   }, [newGist, swayCode, solidityCode, updateLog, toolchain, showSolidity]);
 
   const onCompileClick = useCallback(() => {
-    track("Compile Click", { toolchain });
     if (showSolidity) {
       // Transpile the Solidity code before compiling.
-      track("Transpile");
       setCodeToTranspile(solidityCode);
     } else {
       setCodeToCompile(swayCode);
@@ -215,7 +211,6 @@ function App() {
         contractId={contractId}
         updateLog={updateLog}
       />
-      <Analytics />
     </div>
   );
 }
