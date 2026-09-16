@@ -52,7 +52,8 @@ export function useGist(
             setGist(response);
           }
         })
-        .catch(() => {});
+        // A failed gist request leaves the editor on its current contents.
+        .catch(() => undefined);
     }
   }, [searchParams, setGist]);
 
@@ -86,7 +87,8 @@ export function useGist(
             return gist;
           }
         })
-        .catch(() => {});
+        // A failed gist request leaves the editor on its current contents.
+        .catch(() => undefined);
 
       return res ?? undefined;
     },
