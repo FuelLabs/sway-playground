@@ -152,7 +152,6 @@ function App() {
     solidityCode,
     setCodeToCompile,
     setCodeToTranspile,
-    toolchain,
   ]);
 
   useTranspile(

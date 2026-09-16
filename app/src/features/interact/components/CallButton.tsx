@@ -33,7 +33,7 @@ export function CallButton({
   const onFunctionClick = useCallback(() => {
     setResponse("");
     functionMutation.mutate();
-  }, [callType, functionMutation, setResponse]);
+  }, [functionMutation, setResponse]);
 
   return (
     <SecondaryButton
