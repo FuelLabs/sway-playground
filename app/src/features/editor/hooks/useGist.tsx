@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import { SERVER_URI } from "../../../constants";
-import { track } from "@vercel/analytics/react";
 import { EditorLanguage } from "../components/ActionOverlay";
 import { useSearchParams } from "react-router-dom";
 
@@ -45,24 +44,16 @@ export function useGist(
         .then((response) => {
           if (response.status < 400) {
             return response.json();
-          } else {
-            track("Get Gist Error", {
-              source: "network",
-              status: response.status,
-            });
           }
         })
         .then((response: GistResponse) => {
           const { error } = response;
-          if (error) {
-            track("Get Gist Error", { source: "server" });
-          } else {
+          if (!error) {
             setGist(response);
           }
         })
-        .catch(() => {
-          track("Get Gist Error", { source: "network" });
-        });
+        // A failed gist request leaves the editor on its current contents.
+        .catch(() => undefined);
     }
   }, [searchParams, setGist]);
 
@@ -88,24 +79,16 @@ export function useGist(
         .then((response) => {
           if (response.status < 400) {
             return response.json();
-          } else {
-            track("New Gist Error", {
-              source: "network",
-              status: response.status,
-            });
           }
         })
         .then((response: { gist: GistMeta; error: string | undefined }) => {
           const { error, gist } = response;
-          if (error) {
-            track("New Gist Error", { source: "server" });
-          } else {
+          if (!error) {
             return gist;
           }
         })
-        .catch(() => {
-          track("New Gist Error", { source: "network" });
-        });
+        // A failed gist request leaves the editor on its current contents.
+        .catch(() => undefined);
 
       return res ?? undefined;
     },
