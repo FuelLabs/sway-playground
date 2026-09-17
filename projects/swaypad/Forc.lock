@@ -19,21 +19,9 @@ dependencies = [
 ]
 
 [[package]]
-name = "big_int"
-version = "0.26.1"
-source = "registry+big_int?0.26.1#QmNgX5iDQcu6rQYKjyfy6fiKVP3CUqPPjNvNrELxTvSnmE!"
-dependencies = ["std"]
-
-[[package]]
 name = "bytecode"
 version = "0.26.1"
 source = "registry+bytecode?0.26.1#QmYA2woBH2KKMz1Fupir5PyqvWjBwqB6UQnJGQdVRvF28b!"
-dependencies = ["std"]
-
-[[package]]
-name = "merkle"
-version = "0.26.0"
-source = "registry+merkle?0.26.0#QmVPESeRGJvb5HBxhrMM8eBMqhYJCjibngvhGZsLfEQWwv!"
 dependencies = ["std"]
 
 [[package]]
@@ -130,21 +118,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "src16"
-version = "0.8.1"
-source = "registry+src16?0.8.1#QmbsxTjJ6iNpBwX2VztTXAuRgApSQs7by1wjhZYX8BRmVU!"
-dependencies = ["std"]
-
-[[package]]
-name = "src17"
-version = "0.8.1"
-source = "registry+src17?0.8.1#QmXDCthSoywN5QxQTAF27drdaz5m7muzMBKhHHwE96AGuX!"
-dependencies = [
-    "merkle registry+merkle?0.26.0#QmVPESeRGJvb5HBxhrMM8eBMqhYJCjibngvhGZsLfEQWwv!",
-    "std",
-]
-
-[[package]]
 name = "src20"
 version = "0.8.0"
 source = "registry+src20?0.8.0#QmSwYjybtdvSF3Ey9RncVUUaFaWsizSBNgAtY9JoyaAHvh!"
@@ -194,8 +167,8 @@ dependencies = ["std"]
 
 [[package]]
 name = "std"
-version = "0.69.1"
-source = "registry+std?0.69.1#QmbPunScay4xpfHKpxQ71dFKXSiyJuPP8P8YhgX5Dkmzm9!"
+version = "0.72.0"
+source = "registry+std?0.72.0#QmTnRFTVHzAWatvZXEPVnaiJrs81CZLkYbEovHzPTyNyis!"
 
 [[package]]
 name = "swaypad"
@@ -203,9 +176,8 @@ source = "member"
 dependencies = [
     "admin",
     "asset",
-    "big_int",
     "bytecode",
-    "merkle registry+merkle?0.26.1#QmbrnpYio3sd6WjzDdpuc7iu8M9NLp9S8WMAshfnzJx9L7!",
+    "merkle",
     "ownership registry+ownership?0.26.1#QmcmRuXsD2ZaE74nZ5vGxc1QhYJhjQKMwho6ZfkYt1cs6Q!",
     "pausable",
     "queue",
@@ -216,8 +188,6 @@ dependencies = [
     "src12",
     "src14 registry+src14?0.8.1#QmVSGf3k13sfJCN2FQcTJAhXa8bmpdBRSbHWTXcuxoaAkt!",
     "src15",
-    "src16",
-    "src17",
     "src20 registry+src20?0.8.1#QmeJqNZFcPCUgKDWRjeKHQhEraMHX9n5sr8S9Vkt4wmnV1!",
     "src3",
     "src5 registry+src5?0.8.1#QmcUKCMFWYYpGzqSxZFn3d97MhQ9RAiEMoQGWjVE2AmMFN!",
