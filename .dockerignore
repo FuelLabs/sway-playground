@@ -1,3 +1,8 @@
+# Shared ignores for Railway (root Dockerfile → app/) and CI
+# (deployment/Dockerfile with context `.`).
+#
+# Do NOT ignore Cargo.toml / Cargo.lock / Rocket.toml / src / projects —
+# the backend image build copies the Rust crate from the repo root.
 node_modules
 **/node_modules
 dist
@@ -8,7 +13,4 @@ build
 target
 deployment
 helm
-src
-Cargo.lock
-Cargo.toml
-Rocket.toml
+app/node_modules
