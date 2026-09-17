@@ -1,0 +1,14 @@
+node_modules
+**/node_modules
+dist
+build
+**/build
+.git
+.vercel
+target
+deployment
+helm
+src
+Cargo.lock
+Cargo.toml
+Rocket.toml

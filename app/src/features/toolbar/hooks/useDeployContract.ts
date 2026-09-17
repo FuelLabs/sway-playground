@@ -6,10 +6,7 @@ import {
   StorageSlot,
 } from "fuels";
 import { useMutation } from "@tanstack/react-query";
-import { useFuel, useWallet } from "@fuels/react";
-import { track } from "@vercel/analytics/react";
-import { useEffect, useState } from "react";
-import { toMetricProperties } from "../../../utils/metrics";
+import { useWallet } from "@fuels/react";
 import Timeout from "await-timeout";
 
 const DEPLOYMENT_TIMEOUT_MS = 120000;
@@ -28,27 +25,12 @@ export function useDeployContract(
   updateLog: (entry: string) => void,
 ) {
   const { wallet, isLoading: walletIsLoading } = useWallet();
-  const { fuel } = useFuel();
-  const [metricMetadata, setMetricMetadata] = useState({});
-
-  useEffect(() => {
-    const waitForMetadata = async () => {
-      const name = fuel.currentConnector()?.name ?? "none";
-      const networkUrl = wallet?.provider.url ?? "none";
-      const version = (await wallet?.provider.getVersion()) ?? "none";
-      setMetricMetadata({ name, version, networkUrl });
-    };
-    waitForMetadata();
-  }, [wallet, fuel]);
 
   const mutation = useMutation({
     // Retry once if the wallet is still loading.
     retry: walletIsLoading && !wallet ? 1 : 0,
     onSuccess,
-    onError: (error) => {
-      track("Deploy Error", toMetricProperties(error, metricMetadata));
-      onError(error);
-    },
+    onError,
     mutationFn: async (): Promise<DeployContractData> => {
       if (!wallet) {
         if (walletIsLoading) {
