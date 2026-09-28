@@ -28,6 +28,7 @@ function AbiActionToolbar({
       style={{
         margin: "5px 0 10px",
         display: isMobile ? "inline-table" : "flex",
+        flexWrap: "wrap",
       }}
     >
       <SecondaryButton
